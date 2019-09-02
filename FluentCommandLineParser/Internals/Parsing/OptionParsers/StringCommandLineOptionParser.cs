@@ -39,7 +39,15 @@ namespace Fclp.Internals.Parsing.OptionParsers
 		/// <returns></returns>
 		public string Parse(ParsedOption parsedOption)
 		{
-			return parsedOption.Value == null ? null : parsedOption.Value.RemoveAnyWrappingDoubleQuotes();
+            if (parsedOption.Value == null)
+            {
+                return null;
+            }
+            if (parsedOption.Values.Count() > 1)
+            {
+                return parsedOption.Value.RemoveAnyWrappingDoubleQuotes();
+            }
+            return parsedOption.Value;
 		}
 
 		/// <summary>
@@ -56,7 +64,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
 
 			var items = value.SplitOnWhitespace();
 
-			return items.Count() == 1;
+			return items.Count() == 1 || (value.StartsWith("\"") && value.EndsWith("\""));
 		}
 	}
 }

@@ -142,22 +142,30 @@ namespace Fclp.Internals.Parsing
         private void FindOptionIndexes()
         {
             var indexes = new List<int>();
-
+            var insideQuote = false;
             for (int index = 0; index < _args.Length; index++)
             {
                 string currentArg = _args[index];
 
                 if (IsEndOfOptionsKey(currentArg)) break;
                 if(_parseCommands && index == 0 && IsACmd(currentArg)) continue;
-                if (IsAKey(currentArg) == false)
+                if (insideQuote || !IsAKey(currentArg))
                 {
                     if (indexes.Count == 0)
                     {
                         _orphanArgs.Add(currentArg);
                     }
+                    if (!insideQuote && currentArg.StartsWith("\"") && !currentArg.EndsWith("\""))
+                    {
+                        insideQuote = true;
+                    }
+                    else if (insideQuote && currentArg.EndsWith("\""))
+                    {
+                        insideQuote = false;
+                    }
                     continue;
                 };
-
+                insideQuote = false;
                 indexes.Add(index);
             }
 

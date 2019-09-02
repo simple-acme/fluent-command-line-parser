@@ -92,9 +92,15 @@ namespace Fclp.Internals.Extensions
 		/// </summary>
 		public static string RemoveAnyWrappingDoubleQuotes(this string str)
 		{
-			return str.IsNullOrWhiteSpace()
-				       ? str
-				       : str.TrimStart('"').TrimEnd('"');
+            if (str.IsNullOrWhiteSpace())
+            {
+                return str;
+            }
+            if (str.StartsWith("\"") && str.EndsWith("\""))
+            {
+                str = str.Substring(1, str.Length - 2);
+            }
+            return str;
 		}
 
 		/// <summary>
