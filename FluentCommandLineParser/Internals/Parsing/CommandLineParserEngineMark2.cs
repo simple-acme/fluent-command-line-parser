@@ -22,168 +22,156 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
+using Fclp.Internals.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Fclp.Internals.Extensions;
 
 namespace Fclp.Internals.Parsing
 {
-	/// <summary>
-	/// More advanced parser for transforming command line arguments into appropriate <see cref="ParsedOption"/>.
-	/// </summary>
-	public class CommandLineParserEngineMark2 : ICommandLineParserEngine
-	{
-	    private readonly SpecialCharacters _specialCharacters;
-	    private readonly List<string> _additionalArgumentsFound = new List<string>();
-		private readonly List<ParsedOption> _parsedOptions = new List<ParsedOption>();
-	    private readonly OptionArgumentParser _optionArgumentParser;
+    /// <summary>
+    /// More advanced parser for transforming command line arguments into appropriate <see cref="ParsedOption"/>.
+    /// </summary>
+    public class CommandLineParserEngineMark2 : ICommandLineParserEngine
+    {
+        private readonly SpecialCharacters _specialCharacters;
+        private readonly List<string> _additionalArgumentsFound = new List<string>();
+        private readonly List<ParsedOption> _parsedOptions = new List<ParsedOption>();
+        private readonly OptionArgumentParser _optionArgumentParser;
 
         /// <summary>
         /// Initialises a new instance of <see cref="CommandLineParserEngineMark2"/>.
         /// </summary>
         /// <param name="specialCharacters"></param>
         public CommandLineParserEngineMark2(SpecialCharacters specialCharacters)
-	    {
-	        _specialCharacters = specialCharacters;
-	        _optionArgumentParser = new OptionArgumentParser(specialCharacters);
+        {
+            _specialCharacters = specialCharacters;
+            _optionArgumentParser = new OptionArgumentParser(specialCharacters);
         }
 
-	    /// <summary>
+        /// <summary>
         /// Parses the specified <see><cref>T:System.String[]</cref></see> into key value pairs.
         /// </summary>
         /// <param name="args">The <see><cref>T:System.String[]</cref></see> to parse.</param>
         /// <param name="parseCommands">true to parse any commands, false to skip commands.</param>
         /// <returns>An <see cref="ICommandLineParserResult"/> representing the results of the parse operation.</returns>
         public ParserEngineResult Parse(string[] args, bool parseCommands)
-		{
-			args = args ?? new string[0];
+        {
+            args = args ?? new string[0];
 
-			var grouper = new CommandLineOptionGrouper(_specialCharacters);
+            var grouper = new CommandLineOptionGrouper(_specialCharacters);
 
             var grouped = grouper.GroupArgumentsByOption(args, parseCommands);
 
-            string command = parseCommands ? ExtractAnyCommand(grouped) : null;
+            var command = parseCommands ? ExtractAnyCommand(grouped) : null;
 
             foreach (var optionGroup in grouped)
-			{
-				string rawKey = optionGroup.First();
-				ParseGroupIntoOption(rawKey, optionGroup.Skip(1));
-			}
+            {
+                var rawKey = optionGroup.First();
+                ParseGroupIntoOption(rawKey, optionGroup.Skip(1));
+            }
 
             if (command != null)
             {
                 _additionalArgumentsFound.RemoveAt(0);
             }
 
-			return new ParserEngineResult(_parsedOptions, _additionalArgumentsFound, command);
-		}
+            return new ParserEngineResult(_parsedOptions, _additionalArgumentsFound, command);
+        }
 
-	    private string ExtractAnyCommand(string[][] grouped)
-	    {
-	        if (grouped.Length > 0)
-	        {
-	            var cmdGroup = grouped.First();
+        private string ExtractAnyCommand(string[][] grouped)
+        {
+            if (grouped.Length > 0)
+            {
+                var cmdGroup = grouped.First();
 
-	            var cmd = cmdGroup.FirstOrDefault();
+                var cmd = cmdGroup.FirstOrDefault();
 
-	            if (IsAKey(cmd) == false)
-	            {
-	                return cmd;
-	            }
-	        }
+                if (IsAKey(cmd) == false)
+                {
+                    return cmd;
+                }
+            }
 
-	        return null;
-	    }
+            return null;
+        }
 
 
-	    private void ParseGroupIntoOption(string rawKey, IEnumerable<string> optionGroup)
-		{
-			if (IsAKey(rawKey))
-			{
-				var parsedOption = new ParsedOptionFactory(_specialCharacters).Create(rawKey);
+        private void ParseGroupIntoOption(string rawKey, IEnumerable<string> optionGroup)
+        {
+            if (IsAKey(rawKey))
+            {
+                var parsedOption = new ParsedOptionFactory(_specialCharacters).Create(rawKey);
 
-				TrimSuffix(parsedOption);
+                TrimSuffix(parsedOption);
 
-				_optionArgumentParser.ParseArguments(optionGroup, parsedOption);
+                _optionArgumentParser.ParseArguments(optionGroup, parsedOption);
 
-				AddParsedOptionToList(parsedOption);
-			}
-			else
-			{
-				AddAdditionArgument(rawKey);
-				optionGroup.ForEach(AddAdditionArgument);
-			}
-		}
+                AddParsedOptionToList(parsedOption);
+            }
+            else
+            {
+                AddAdditionArgument(rawKey);
+                optionGroup.ForEach(AddAdditionArgument);
+            }
+        }
 
-		private void AddParsedOptionToList(ParsedOption parsedOption)
-		{
-			if (ShortOptionNeedsToBeSplit(parsedOption))
-			{
-				_parsedOptions.AddRange(CloneAndSplit(parsedOption));
-			}
-			else
-			{
-				_parsedOptions.Add(parsedOption);
-			}
-		}
+        private void AddParsedOptionToList(ParsedOption parsedOption)
+        {
+            if (ShortOptionNeedsToBeSplit(parsedOption))
+            {
+                _parsedOptions.AddRange(CloneAndSplit(parsedOption));
+            }
+            else
+            {
+                _parsedOptions.Add(parsedOption);
+            }
+        }
 
-		private void AddAdditionArgument(string argument)
-		{
-			if (IsEndOfOptionsKey(argument) == false)
-			{
-				_additionalArgumentsFound.Add(argument);
-			}
-		}
+        private void AddAdditionArgument(string argument)
+        {
+            if (IsEndOfOptionsKey(argument) == false)
+            {
+                _additionalArgumentsFound.Add(argument);
+            }
+        }
 
-		private bool ShortOptionNeedsToBeSplit(ParsedOption parsedOption)
-		{
-			return PrefixIsShortOption(parsedOption.Prefix) && parsedOption.Key.Length > 1;
-		}
+        private bool ShortOptionNeedsToBeSplit(ParsedOption parsedOption) => PrefixIsShortOption(parsedOption.Prefix) && parsedOption.Key.Length > 1;
 
-		private static IEnumerable<ParsedOption> CloneAndSplit(ParsedOption parsedOption)
-		{
-			return parsedOption.Key.Select(c => Clone(parsedOption, c)).ToList();
-		}
+        private static IEnumerable<ParsedOption> CloneAndSplit(ParsedOption parsedOption) => parsedOption.Key.Select(c => Clone(parsedOption, c)).ToList();
 
-		private static ParsedOption Clone(ParsedOption toClone, char c)
-		{
-			var clone = toClone.Clone();
-			clone.Key = new string(new[] { c });
-			return clone;
-		}
+        private static ParsedOption Clone(ParsedOption toClone, char c)
+        {
+            var clone = toClone.Clone();
+            clone.Key = new string(new[] { c });
+            return clone;
+        }
 
-		private bool PrefixIsShortOption(string key)
-		{
-			return _specialCharacters.ShortOptionPrefix.Contains(key);
-		}
+        private bool PrefixIsShortOption(string key) => _specialCharacters.ShortOptionPrefix.Contains(key);
 
-		private static void TrimSuffix(ParsedOption parsedOption)
-		{
-			if (parsedOption.HasSuffix)
-			{
-				parsedOption.Key = parsedOption.Key.TrimEnd(parsedOption.Suffix.ToCharArray());
-			}
-		}
+        private static void TrimSuffix(ParsedOption parsedOption)
+        {
+            if (parsedOption.HasSuffix)
+            {
+                parsedOption.Key = parsedOption.Key.TrimEnd(parsedOption.Suffix.ToCharArray());
+            }
+        }
 
-		/// <summary>
-		/// Gets whether the specified <see cref="System.String"/> is a Option key.
-		/// </summary>
-		/// <param name="arg">The <see cref="System.String"/> to examine.</param>
-		/// <returns><c>true</c> if <paramref name="arg"/> is a Option key; otherwise <c>false</c>.</returns>
-		private bool IsAKey(string arg)
-		{ // TODO: push related special char operations into there own object
-			return arg != null 
-				&& _specialCharacters.OptionPrefix.Any(arg.StartsWith)
-				&& _specialCharacters.OptionPrefix.Any(arg.Equals) == false;
-		}
+        /// <summary>
+        /// Gets whether the specified <see cref="System.String"/> is a Option key.
+        /// </summary>
+        /// <param name="arg">The <see cref="System.String"/> to examine.</param>
+        /// <returns><c>true</c> if <paramref name="arg"/> is a Option key; otherwise <c>false</c>.</returns>
+        private bool IsAKey(string arg)
+        { // TODO: push related special char operations into there own object
+            return arg != null
+                && _specialCharacters.OptionPrefix.Any(arg.StartsWith)
+                && _specialCharacters.OptionPrefix.Any(arg.Equals) == false;
+        }
 
-		/// <summary>
-		/// Determines whether the specified string indicates the end of parsed options.
-		/// </summary>
-		private bool IsEndOfOptionsKey(string arg)
-		{
-			return string.Equals(arg, _specialCharacters.EndOfOptionsKey, StringComparison.InvariantCultureIgnoreCase);
-		}
-	}
+        /// <summary>
+        /// Determines whether the specified string indicates the end of parsed options.
+        /// </summary>
+        private bool IsEndOfOptionsKey(string arg) => string.Equals(arg, _specialCharacters.EndOfOptionsKey, StringComparison.InvariantCultureIgnoreCase);
+    }
 }

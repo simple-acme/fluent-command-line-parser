@@ -26,57 +26,48 @@ using System.Linq;
 
 namespace Fclp.Internals.Parsing
 {
-	/// <summary>
-	/// Factory used to created parsed option meta data.
-	/// </summary>
-	public class ParsedOptionFactory
-	{
-	    private readonly SpecialCharacters _specialCharacters;
+    /// <summary>
+    /// Factory used to created parsed option meta data.
+    /// </summary>
+    public class ParsedOptionFactory
+    {
+        private readonly SpecialCharacters _specialCharacters;
 
         /// <summary>
         /// Initialises a new instance of <see cref="ParsedOptionFactory"/>.
         /// </summary>
         /// <param name="specialCharacters"></param>
-	    public ParsedOptionFactory(SpecialCharacters specialCharacters)
-	    {
-	        _specialCharacters = specialCharacters;
-	    }
+	    public ParsedOptionFactory(SpecialCharacters specialCharacters) => _specialCharacters = specialCharacters;
 
-	    /// <summary>
-		/// Creates parsed option meta data for the specified raw key.
-		/// </summary>
-		public ParsedOption Create(string rawKey)
-		{
-			var prefix = ExtractPrefix(rawKey);
+        /// <summary>
+        /// Creates parsed option meta data for the specified raw key.
+        /// </summary>
+        public ParsedOption Create(string rawKey)
+        {
+            var prefix = ExtractPrefix(rawKey);
 
-			return new ParsedOption
-			{
-				RawKey = rawKey,
-				Prefix = prefix,
-				Key = rawKey.Remove(0, prefix.Length),
-				Suffix = ExtractSuffix(rawKey)
-			};			
-		}
+            return new ParsedOption
+            {
+                RawKey = rawKey,
+                Prefix = prefix,
+                Key = rawKey.Remove(0, prefix.Length),
+                Suffix = ExtractSuffix(rawKey)
+            };
+        }
 
 
-		/// <summary>
-		/// Extracts the key identifier from the specified <see cref="System.String"/>.
-		/// </summary>
-		/// <param name="arg">The <see cref="System.String"/> to extract the key identifier from.</param>
-		/// <returns>A <see cref="System.String"/> representing the key identifier if found; otherwise <c>null</c>.</returns>
-		private string ExtractPrefix(string arg)
-		{
-			return arg != null ? _specialCharacters.OptionPrefix.FirstOrDefault(arg.StartsWith) : null;
-		}
+        /// <summary>
+        /// Extracts the key identifier from the specified <see cref="System.String"/>.
+        /// </summary>
+        /// <param name="arg">The <see cref="System.String"/> to extract the key identifier from.</param>
+        /// <returns>A <see cref="System.String"/> representing the key identifier if found; otherwise <c>null</c>.</returns>
+        private string ExtractPrefix(string arg) => arg != null ? _specialCharacters.OptionPrefix.FirstOrDefault(arg.StartsWith) : null;
 
-		/// <summary>
-		/// Extracts the key identifier from the specified <see cref="System.String"/>.
-		/// </summary>
-		/// <param name="arg">The <see cref="System.String"/> to extract the key identifier from.</param>
-		/// <returns>A <see cref="System.String"/> representing the key identifier if found; otherwise <c>null</c>.</returns>
-		private string ExtractSuffix(string arg)
-		{
-			return arg != null ? _specialCharacters.OptionSuffix.FirstOrDefault(arg.EndsWith) : null;
-		}
-	}
+        /// <summary>
+        /// Extracts the key identifier from the specified <see cref="System.String"/>.
+        /// </summary>
+        /// <param name="arg">The <see cref="System.String"/> to extract the key identifier from.</param>
+        /// <returns>A <see cref="System.String"/> representing the key identifier if found; otherwise <c>null</c>.</returns>
+        private string ExtractSuffix(string arg) => arg != null ? _specialCharacters.OptionSuffix.FirstOrDefault(arg.EndsWith) : null;
+    }
 }

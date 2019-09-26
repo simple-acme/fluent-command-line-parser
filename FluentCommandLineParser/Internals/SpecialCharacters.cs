@@ -26,40 +26,40 @@ using System.Collections.Generic;
 
 namespace Fclp.Internals
 {
-	/// <summary>
-	/// Contains special characters used throughout the parser.
-	/// </summary>
-	public class SpecialCharacters
-	{
-		/// <summary>
-		/// Characters used for value assignment.
-		/// </summary>
-		public char[] ValueAssignments { get; private set; } = new[] { '=', ':' };
+    /// <summary>
+    /// Contains special characters used throughout the parser.
+    /// </summary>
+    public class SpecialCharacters
+    {
+        /// <summary>
+        /// Characters used for value assignment.
+        /// </summary>
+        public char[] ValueAssignments { get; private set; } = new[] { '=', ':' };
 
-		/// <summary>
-		/// Assign a name to the whitespace character.
-		/// </summary>
-		public char Whitespace { get; set; } = ' ';
+        /// <summary>
+        /// Assign a name to the whitespace character.
+        /// </summary>
+        public char Whitespace { get; set; } = ' ';
 
-		/// <summary>
-		/// Characters that define the start of an option.
-		/// </summary>
-		public List<string> OptionPrefix { get; private set; } = new List<string> { "/", "--", "-" };
+        /// <summary>
+        /// Characters that define the start of an option.
+        /// </summary>
+        public List<string> OptionPrefix { get; private set; } = new List<string> { "/", "--", "-" };
 
-		/// <summary>
-		/// Characters that have special meaning at the end of an option key.
-		/// </summary>
-		public List<string> OptionSuffix { get; private set; } = new List<string> { "+", "-" };
+        /// <summary>
+        /// Characters that have special meaning at the end of an option key.
+        /// </summary>
+        public List<string> OptionSuffix { get; private set; } = new List<string> { "+", "-" };
 
-		/// <summary>s
-		/// Characters that define an explicit short option.
-		/// </summary>
-		public List<string> ShortOptionPrefix { get; private set; } = new List<string> { "-" };
+        /// <summary>s
+        /// Characters that define an explicit short option.
+        /// </summary>
+        public List<string> ShortOptionPrefix { get; private set; } = new List<string> { "-" };
 
-		/// <summary>
-		/// The key that indicates the end of any options.
-		/// Any following arguments should be treated as operands, even if they begin with the '-' character.
-		/// </summary>
-		public string EndOfOptionsKey { get; set; } = "--";
-	}
+        /// <summary>
+        /// The key that indicates the end of any options.
+        /// Any following arguments should be treated as operands, even if they begin with the '-' character.
+        /// </summary>
+        public string EndOfOptionsKey { get; set; } = "--";
+    }
 }

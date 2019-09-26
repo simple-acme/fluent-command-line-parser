@@ -22,10 +22,10 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
+using Fclp.Internals.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Fclp.Internals.Extensions;
 
 namespace Fclp.Internals.Parsing
 {
@@ -56,7 +56,10 @@ namespace Fclp.Internals.Parsing
         /// </summary>
         public string[][] GroupArgumentsByOption(string[] args, bool parseCommands)
         {
-            if (args.IsNullOrEmpty()) return new string[0][];
+            if (args.IsNullOrEmpty())
+            {
+                return new string[0][];
+            }
 
             _parseCommands = parseCommands;
 
@@ -79,7 +82,7 @@ namespace Fclp.Internals.Parsing
                 {
                     if (ContainsAtLeastOneOption(args))
                     {
-                        options.Add(new[] {first});
+                        options.Add(new[] { first });
 
                         FindOptionIndexes();
 
@@ -119,20 +122,17 @@ namespace Fclp.Internals.Parsing
             return options.ToArray();
         }
 
-        private bool ContainsAtLeastOneOption(string[] args)
-        {
-            return args.Any(IsAKey);
-        }
+        private bool ContainsAtLeastOneOption(string[] args) => args.Any(IsAKey);
 
         private string[] CreateGroupForCurrent()
         {
             var optionEndIndex = LookupTheNextOptionIndex();
 
             optionEndIndex = optionEndIndex != -1
-				? optionEndIndex - 1
-				: _args.Length - 1;
+                ? optionEndIndex - 1
+                : _args.Length - 1;
 
-			var length = optionEndIndex - (_currentOptionIndex - 1);
+            var length = optionEndIndex - (_currentOptionIndex - 1);
 
             return _args.Skip(_currentOptionIndex)
                         .Take(length)
@@ -143,12 +143,20 @@ namespace Fclp.Internals.Parsing
         {
             var indexes = new List<int>();
             var insideQuote = false;
-            for (int index = 0; index < _args.Length; index++)
+            for (var index = 0; index < _args.Length; index++)
             {
-                string currentArg = _args[index];
+                var currentArg = _args[index];
 
-                if (IsEndOfOptionsKey(currentArg)) break;
-                if(_parseCommands && index == 0 && IsACmd(currentArg)) continue;
+                if (IsEndOfOptionsKey(currentArg))
+                {
+                    break;
+                }
+
+                if (_parseCommands && index == 0 && IsACmd(currentArg))
+                {
+                    continue;
+                }
+
                 if (insideQuote || !IsAKey(currentArg))
                 {
                     if (indexes.Count == 0)
@@ -175,7 +183,10 @@ namespace Fclp.Internals.Parsing
         private bool MoveToNextOption()
         {
             var nextIndex = LookupTheNextOptionIndex();
-            if (nextIndex == -1) return false;
+            if (nextIndex == -1)
+            {
+                return false;
+            }
 
             _currentOptionLookupIndex += 1;
             _currentOptionIndex = nextIndex;
@@ -183,32 +194,20 @@ namespace Fclp.Internals.Parsing
             return true;
         }
 
-        private int LookupTheNextOptionIndex()
-        {
-            return _foundOptionLookup.ElementAtOrDefault(_currentOptionLookupIndex + 1, -1);
-        }
+        private int LookupTheNextOptionIndex() => _foundOptionLookup.ElementAtOrDefault(_currentOptionLookupIndex + 1, -1);
 
         /// <summary>
         /// Gets whether the specified <see cref="System.String"/> is a Option key.
         /// </summary>
         /// <param name="arg">The <see cref="System.String"/> to examine.</param>
         /// <returns><c>true</c> if <paramref name="arg"/> is a Option key; otherwise <c>false</c>.</returns>
-        private bool IsAKey(string arg)
-        {
-            return arg != null && _specialCharacters.OptionPrefix.Any(arg.StartsWith);
-        }
+        private bool IsAKey(string arg) => arg != null && _specialCharacters.OptionPrefix.Any(arg.StartsWith);
 
-        private bool IsACmd(string arg)
-        {
-            return arg != null && _specialCharacters.OptionPrefix.Any(arg.StartsWith) == false;
-        }
+        private bool IsACmd(string arg) => arg != null && _specialCharacters.OptionPrefix.Any(arg.StartsWith) == false;
 
         /// <summary>
         /// Determines whether the specified string indicates the end of parsed options.
         /// </summary>
-        private bool IsEndOfOptionsKey(string arg)
-        {
-            return string.Equals(arg, _specialCharacters.EndOfOptionsKey, StringComparison.InvariantCultureIgnoreCase);
-        }
+        private bool IsEndOfOptionsKey(string arg) => string.Equals(arg, _specialCharacters.EndOfOptionsKey, StringComparison.InvariantCultureIgnoreCase);
     }
 }

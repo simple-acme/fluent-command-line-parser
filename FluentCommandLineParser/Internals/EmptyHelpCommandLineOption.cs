@@ -22,34 +22,28 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
+using Fclp.Internals.Parsing;
 using System;
 using System.Collections.Generic;
-using Fclp.Internals.Parsing;
 
 namespace Fclp.Internals
 {
-	/// <summary>
-	/// Help command line options used when there have been non setup.
-	/// </summary>
-	public class EmptyHelpCommandLineOption : IHelpCommandLineOption
-	{
-		/// <summary>
-		/// Always returns false.
-		/// </summary>
-		/// <param name="commandLineArgs">The command line args.</param>
-		/// <param name="comparisonType">Type of the comparison.</param>
-		/// <returns></returns>
-		public bool ShouldShowHelp(IEnumerable<ParsedOption> commandLineArgs, StringComparison comparisonType)
-		{
-			return false;
-		}
+    /// <summary>
+    /// Help command line options used when there have been non setup.
+    /// </summary>
+    public class EmptyHelpCommandLineOption : IHelpCommandLineOption
+    {
+        /// <summary>
+        /// Always returns false.
+        /// </summary>
+        /// <param name="commandLineArgs">The command line args.</param>
+        /// <param name="comparisonType">Type of the comparison.</param>
+        /// <returns></returns>
+        public bool ShouldShowHelp(IEnumerable<ParsedOption> commandLineArgs, StringComparison comparisonType) => false;
 
-		/// <summary>
-		/// Not supported.
-		/// </summary>
-		public void ShowHelp(IEnumerable<ICommandLineOption> options)
-		{
-			throw new NotSupportedException();
-		}
-	}
+        /// <summary>
+        /// Not supported.
+        /// </summary>
+        public void ShowHelp(IEnumerable<ICommandLineOption> options) => throw new NotSupportedException();
+    }
 }

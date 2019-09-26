@@ -22,7 +22,6 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
-using System;
 
 namespace Fclp.Internals.Parsing.OptionParsers
 {
@@ -37,10 +36,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// Initialises a new instance of the <see cref="NullableCommandLineOptionParser{TType}"/>.
         /// </summary>
         /// <param name="parserFactory"></param>
-        public NullableCommandLineOptionParser(ICommandLineOptionParserFactory parserFactory)
-        {
-            _parserFactory = parserFactory;
-        }
+        public NullableCommandLineOptionParser(ICommandLineOptionParserFactory parserFactory) => _parserFactory = parserFactory;
 
         /// <summary>
         /// Parses the specified <see cref="ParsedOption"/> into a nullable type.
@@ -48,16 +44,17 @@ namespace Fclp.Internals.Parsing.OptionParsers
         public TNullableType? Parse(ParsedOption parsedOption)
         {
             var parser = _parserFactory.CreateParser<TNullableType>();
-            if (parser.CanParse(parsedOption) == false) return null;
+            if (parser.CanParse(parsedOption) == false)
+            {
+                return null;
+            }
+
             return parser.Parse(parsedOption);
         }
 
         /// <summary>
         /// Determines whether the specified <see cref="ParsedOption"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
         /// </summary>
-        public bool CanParse(ParsedOption parsedOption)
-        {
-            return true;
-        }
+        public bool CanParse(ParsedOption parsedOption) => true;
     }
 }

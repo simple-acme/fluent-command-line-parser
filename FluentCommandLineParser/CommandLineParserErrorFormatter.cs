@@ -22,74 +22,83 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
-using System.Collections.Generic;
-using System.Text;
 using Fclp.Internals.Errors;
 using Fclp.Internals.Extensions;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Fclp
 {
-	/// <summary>
-	/// A simple parser error formatter designed to create error descriptions suitable for the console.
-	/// </summary>
-	public class CommandLineParserErrorFormatter : ICommandLineParserErrorFormatter
-	{
+    /// <summary>
+    /// A simple parser error formatter designed to create error descriptions suitable for the console.
+    /// </summary>
+    public class CommandLineParserErrorFormatter : ICommandLineParserErrorFormatter
+    {
 
-		/// <summary>
-		/// Formats the specified list of <see cref="ICommandLineParserError"/> to a <see cref="System.String"/> suitable for the end user.
-		/// </summary>
-		/// <param name="parserErrors">The errors to format.</param>
-		/// <returns>A <see cref="System.String"/> describing the specified errors.</returns>
-		public string Format(IEnumerable<ICommandLineParserError> parserErrors)
-		{
-			if (parserErrors.IsNullOrEmpty()) return null;
+        /// <summary>
+        /// Formats the specified list of <see cref="ICommandLineParserError"/> to a <see cref="System.String"/> suitable for the end user.
+        /// </summary>
+        /// <param name="parserErrors">The errors to format.</param>
+        /// <returns>A <see cref="System.String"/> describing the specified errors.</returns>
+        public string Format(IEnumerable<ICommandLineParserError> parserErrors)
+        {
+            if (parserErrors.IsNullOrEmpty())
+            {
+                return null;
+            }
 
-			var builder = new StringBuilder();
+            var builder = new StringBuilder();
 
-			foreach (var error in parserErrors)
-			{
-				builder.AppendLine(Format(error));
-			}
+            foreach (var error in parserErrors)
+            {
+                builder.AppendLine(Format(error));
+            }
 
-			return builder.ToString();
-		}
-	
-		/// <summary>
-		/// Formats the specified <see cref="ICommandLineParserError"/> to a <see cref="System.String"/> suitable for the end user.
-		/// </summary>
-		/// <param name="parserError">The error to format. This must not be null.</param>
-		/// <returns>A <see cref="System.String"/> describing the specified error.</returns>
-		public string Format(ICommandLineParserError parserError)
-		{
-			var optionSyntaxParseError = parserError as OptionSyntaxParseError;
-			if (optionSyntaxParseError != null) return FormatOptionSyntaxParseError(optionSyntaxParseError);
+            return builder.ToString();
+        }
 
-			var expectedOptionNotFoundError = parserError as ExpectedOptionNotFoundParseError;
-			if (expectedOptionNotFoundError != null) return FormatExpectedOptionNotFoundError(expectedOptionNotFoundError);
+        /// <summary>
+        /// Formats the specified <see cref="ICommandLineParserError"/> to a <see cref="System.String"/> suitable for the end user.
+        /// </summary>
+        /// <param name="parserError">The error to format. This must not be null.</param>
+        /// <returns>A <see cref="System.String"/> describing the specified error.</returns>
+        public string Format(ICommandLineParserError parserError)
+        {
+            var optionSyntaxParseError = parserError as OptionSyntaxParseError;
+            if (optionSyntaxParseError != null)
+            {
+                return FormatOptionSyntaxParseError(optionSyntaxParseError);
+            }
 
-			return "unknown parse error.";
-		}
+            var expectedOptionNotFoundError = parserError as ExpectedOptionNotFoundParseError;
+            if (expectedOptionNotFoundError != null)
+            {
+                return FormatExpectedOptionNotFoundError(expectedOptionNotFoundError);
+            }
 
-		private static string FormatOptionSyntaxParseError(OptionSyntaxParseError error)
-		{
-			return string.Format("Option '{0}' parse error: could not parse '{1}' to '{2}'.",
-			                     error.ParsedOption.RawKey,
-								 error.ParsedOption.Value.RemoveAnyWrappingDoubleQuotes(),
-			                     error.Option.SetupType);
-		}
+            return "unknown parse error.";
+        }
 
-		private static string FormatExpectedOptionNotFoundError(ExpectedOptionNotFoundParseError error)
-		{
-			var optionText = GetOptionText(error);
-			return string.Format("Option '{0}' parse error. option is required but was not specified.", optionText);
-		}
+        private static string FormatOptionSyntaxParseError(OptionSyntaxParseError error)
+        {
+            return string.Format("Option '{0}' parse error: could not parse '{1}' to '{2}'.",
+                                 error.ParsedOption.RawKey,
+                                 error.ParsedOption.Value.RemoveAnyWrappingDoubleQuotes(),
+                                 error.Option.SetupType);
+        }
 
-		private static string GetOptionText(ICommandLineParserError error)
-		{
-			var optionText = error.Option.LongName.IsNullOrWhiteSpace()
-				                 ? error.Option.ShortName
-				                 : error.Option.ShortName + ":" + error.Option.LongName;
-			return optionText;
-		}
-	}
+        private static string FormatExpectedOptionNotFoundError(ExpectedOptionNotFoundParseError error)
+        {
+            var optionText = GetOptionText(error);
+            return string.Format("Option '{0}' parse error. option is required but was not specified.", optionText);
+        }
+
+        private static string GetOptionText(ICommandLineParserError error)
+        {
+            var optionText = error.Option.LongName.IsNullOrWhiteSpace()
+                                 ? error.Option.ShortName
+                                 : error.Option.ShortName + ":" + error.Option.LongName;
+            return optionText;
+        }
+    }
 }

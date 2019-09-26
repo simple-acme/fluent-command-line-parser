@@ -26,30 +26,26 @@ using System.Globalization;
 
 namespace Fclp.Internals.Parsing.OptionParsers
 {
-	/// <summary>
-	/// Parser used to convert to <see cref="System.Double"/>.
-	/// </summary>
-	public class DoubleCommandLineOptionParser : ICommandLineOptionParser<double>
-	{
-		/// <summary>
-		/// Parses the specified <see cref="System.String"/> into a <see cref="System.Double"/>.
-		/// </summary>
-		/// <param name="parsedOption"></param>
-		/// <returns></returns>
-		public double Parse(ParsedOption parsedOption)
-		{
-			return double.Parse(parsedOption.Value, CultureInfo.InvariantCulture);
-		}
+    /// <summary>
+    /// Parser used to convert to <see cref="System.Double"/>.
+    /// </summary>
+    public class DoubleCommandLineOptionParser : ICommandLineOptionParser<double>
+    {
+        /// <summary>
+        /// Parses the specified <see cref="System.String"/> into a <see cref="System.Double"/>.
+        /// </summary>
+        /// <param name="parsedOption"></param>
+        /// <returns></returns>
+        public double Parse(ParsedOption parsedOption) => double.Parse(parsedOption.Value, CultureInfo.InvariantCulture);
 
-		/// <summary>
-		/// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
-		/// </summary>
-		/// <param name="parsedOption"></param>
-		/// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
-		public bool CanParse(ParsedOption parsedOption)
-		{
-			double result;
-            return double.TryParse(parsedOption.Value, System.Globalization.NumberStyles.Number, CultureInfo.InvariantCulture, out result);
-		}
-	}
+        /// <summary>
+        /// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
+        /// </summary>
+        /// <param name="parsedOption"></param>
+        /// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
+        public bool CanParse(ParsedOption parsedOption)
+        {
+            return double.TryParse(parsedOption.Value, System.Globalization.NumberStyles.Number, CultureInfo.InvariantCulture, out var result);
+        }
+    }
 }

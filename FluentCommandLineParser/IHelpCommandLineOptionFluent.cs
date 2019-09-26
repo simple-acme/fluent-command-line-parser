@@ -26,55 +26,55 @@ using System;
 
 namespace Fclp
 {
-	/// <summary>
-	/// Provides the fluent interface for setting up the help arguments.
-	/// </summary>
-	public interface IHelpCommandLineOptionFluent
-	{
-		/// <summary>
-		/// Specifies the method to invoke with the formatted command line options when any of the setup 
-		/// help arguments are found. If a callback is not required either do not call it, or specify <c>null</c>.
-		/// </summary>
-		/// <param name="callback">
-		/// The callback to execute with the formatted command line options. 
-		/// </param>
-		/// <returns>A <see cref="ICommandLineOptionFluent{T}"/>.</returns>
-		/// <remarks>
-		/// An example use of this would be to write the provided <see cref="System.String"/> containing the formatted
-		/// options directly to the console. If you would like to use a custom formatter you can do so by providing
-		/// one using the <see cref="WithCustomFormatter"/> method.
-		/// </remarks>
-		IHelpCommandLineOptionFluent Callback(Action<string> callback);
+    /// <summary>
+    /// Provides the fluent interface for setting up the help arguments.
+    /// </summary>
+    public interface IHelpCommandLineOptionFluent
+    {
+        /// <summary>
+        /// Specifies the method to invoke with the formatted command line options when any of the setup 
+        /// help arguments are found. If a callback is not required either do not call it, or specify <c>null</c>.
+        /// </summary>
+        /// <param name="callback">
+        /// The callback to execute with the formatted command line options. 
+        /// </param>
+        /// <returns>A <see cref="ICommandLineOptionFluent{T}"/>.</returns>
+        /// <remarks>
+        /// An example use of this would be to write the provided <see cref="System.String"/> containing the formatted
+        /// options directly to the console. If you would like to use a custom formatter you can do so by providing
+        /// one using the <see cref="WithCustomFormatter"/> method.
+        /// </remarks>
+        IHelpCommandLineOptionFluent Callback(Action<string> callback);
 
-		/// <summary>
-		/// Specified the method to invoke when any of the setup help arguments are found. If a callback is not required
-		/// either do not call it, or specified <c>null</c>.
-		/// </summary>
-		/// <param name="callback">
-		/// The callback to execute. If you have also setup the other help callback this will be called last.
-		/// </param>
-		/// <returns>A <see cref="IHelpCommandLineOptionFluent"/>.</returns>
-		IHelpCommandLineOptionFluent Callback(Action callback);
+        /// <summary>
+        /// Specified the method to invoke when any of the setup help arguments are found. If a callback is not required
+        /// either do not call it, or specified <c>null</c>.
+        /// </summary>
+        /// <param name="callback">
+        /// The callback to execute. If you have also setup the other help callback this will be called last.
+        /// </param>
+        /// <returns>A <see cref="IHelpCommandLineOptionFluent"/>.</returns>
+        IHelpCommandLineOptionFluent Callback(Action callback);
 
-		/// <summary>
-		/// Registers a custom <see cref="ICommandLineOptionFormatter"/> to use to generate the help text.
-		/// </summary>
-		/// <param name="formatter">The custom formatter to use. This must not be <c>null</c>.</param>
-		/// <returns>A <see cref="IHelpCommandLineOptionFluent"/>.</returns>
-		IHelpCommandLineOptionFluent WithCustomFormatter(ICommandLineOptionFormatter formatter);
+        /// <summary>
+        /// Registers a custom <see cref="ICommandLineOptionFormatter"/> to use to generate the help text.
+        /// </summary>
+        /// <param name="formatter">The custom formatter to use. This must not be <c>null</c>.</param>
+        /// <returns>A <see cref="IHelpCommandLineOptionFluent"/>.</returns>
+        IHelpCommandLineOptionFluent WithCustomFormatter(ICommandLineOptionFormatter formatter);
 
-		/// <summary>
-		/// Provides a custom header to be printed before the registered options.
-		/// </summary>
-		/// <param name="header">The header to use.</param>
-		/// <returns>A <see cref="IHelpCommandLineOptionFluent"/>.</returns>
-		IHelpCommandLineOptionFluent WithHeader(string header);
+        /// <summary>
+        /// Provides a custom header to be printed before the registered options.
+        /// </summary>
+        /// <param name="header">The header to use.</param>
+        /// <returns>A <see cref="IHelpCommandLineOptionFluent"/>.</returns>
+        IHelpCommandLineOptionFluent WithHeader(string header);
 
-		/// <summary>
-		/// Specifies that if empty arguments are found then the behaviour should be the same as when any help arguments
-		/// are found.
-		/// </summary>
-		/// <returns>A <see cref="IHelpCommandLineOptionFluent"/>.</returns>
-		IHelpCommandLineOptionFluent UseForEmptyArgs();
-	}
+        /// <summary>
+        /// Specifies that if empty arguments are found then the behaviour should be the same as when any help arguments
+        /// are found.
+        /// </summary>
+        /// <returns>A <see cref="IHelpCommandLineOptionFluent"/>.</returns>
+        IHelpCommandLineOptionFluent UseForEmptyArgs();
+    }
 }

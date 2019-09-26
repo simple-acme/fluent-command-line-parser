@@ -26,13 +26,13 @@ using System;
 
 namespace Fclp
 {
-	/// <summary>
-	/// Parser that constructs and populates the specified type of object from command line arguments.
-	/// </summary>
-	/// <typeparam name="TBuildType">The object type containing the argument properties to populate from parsed command line arguments.</typeparam>
-	[Obsolete("FluentCommandLineBuilder<TBuildType> has been renamed to FluentCommandLineParser<TBuildType>", false)]
-	public class FluentCommandLineBuilder<TBuildType> : FluentCommandLineParser<TBuildType>, IFluentCommandLineBuilder<TBuildType> where TBuildType : class, new()
-	{
-		 
-	}
+    /// <summary>
+    /// Parser that constructs and populates the specified type of object from command line arguments.
+    /// </summary>
+    /// <typeparam name="TBuildType">The object type containing the argument properties to populate from parsed command line arguments.</typeparam>
+    [Obsolete("FluentCommandLineBuilder<TBuildType> has been renamed to FluentCommandLineParser<TBuildType>", false)]
+    public class FluentCommandLineBuilder<TBuildType> : FluentCommandLineParser<TBuildType>, IFluentCommandLineBuilder<TBuildType> where TBuildType : class, new()
+    {
+
+    }
 }

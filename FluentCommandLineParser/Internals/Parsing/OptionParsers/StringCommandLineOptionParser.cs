@@ -22,49 +22,52 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
-using System.Linq;
 using Fclp.Internals.Extensions;
+using System.Linq;
 
 namespace Fclp.Internals.Parsing.OptionParsers
 {
-	/// <summary>
-	/// Parser used to convert to <see cref="System.String"/>.
-	/// </summary>
-	public class StringCommandLineOptionParser : ICommandLineOptionParser<string>
-	{
-		/// <summary>
-		/// Parses the specified <see cref="System.String"/> into a <see cref="System.String"/>.
-		/// </summary>
-		/// <param name="parsedOption"></param>
-		/// <returns></returns>
-		public string Parse(ParsedOption parsedOption)
-		{
+    /// <summary>
+    /// Parser used to convert to <see cref="System.String"/>.
+    /// </summary>
+    public class StringCommandLineOptionParser : ICommandLineOptionParser<string>
+    {
+        /// <summary>
+        /// Parses the specified <see cref="System.String"/> into a <see cref="System.String"/>.
+        /// </summary>
+        /// <param name="parsedOption"></param>
+        /// <returns></returns>
+        public string Parse(ParsedOption parsedOption)
+        {
             if (parsedOption.Value == null)
             {
                 return null;
             }
-            if (parsedOption.Values.Count() > 1)
+            return parsedOption.Value.RemoveAnyWrappingDoubleQuotes();
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
+        /// </summary>
+        /// <param name="parsedOption"></param>
+        /// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
+        public bool CanParse(ParsedOption parsedOption)
+        {
+            if (parsedOption.Value.IsNullOrWhiteSpace())
             {
-                return parsedOption.Value.RemoveAnyWrappingDoubleQuotes();
+                return true;
             }
-            return parsedOption.Value;
-		}
 
-		/// <summary>
-		/// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
-		/// </summary>
-		/// <param name="parsedOption"></param>
-		/// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
-		public bool CanParse(ParsedOption parsedOption)
-		{
-            if (parsedOption.Value.IsNullOrWhiteSpace()) return true;
-            if (parsedOption.HasValue == false) return true;
+            if (parsedOption.HasValue == false)
+            {
+                return true;
+            }
 
-            string value = (parsedOption.Value??"").Trim();
+            var value = (parsedOption.Value ?? "").Trim();
 
-			var items = value.SplitOnWhitespace();
+            var items = value.SplitOnWhitespace();
 
-			return items.Count() == 1 || (value.StartsWith("\"") && value.EndsWith("\""));
-		}
-	}
+            return items.Count() == 1 || (value.StartsWith("\"") && value.EndsWith("\""));
+        }
+    }
 }

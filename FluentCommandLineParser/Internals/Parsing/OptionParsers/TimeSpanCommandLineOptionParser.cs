@@ -23,42 +23,34 @@
 #endregion
 
 using System;
-using System.Globalization;
 
 namespace Fclp.Internals.Parsing.OptionParsers
 {
-	/// <summary>
-	/// Parser used to convert to <see cref="System.TimeSpan"/>.
-	/// </summary>
-	public class TimeSpanCommandLineOptionParser : ICommandLineOptionParser<TimeSpan>
-	{
-		/// <summary>
-		/// Parses the specified <see cref="System.String"/> into a <see cref="System.TimeSpan"/>.
-		/// </summary>
-		/// <param name="parsedOption"></param>
-		/// <returns></returns>
-		public TimeSpan Parse(ParsedOption parsedOption)
-		{
-            return TimeSpan.Parse(TrimAnyUnwantedCharacters(parsedOption.Value));
-		}
+    /// <summary>
+    /// Parser used to convert to <see cref="System.TimeSpan"/>.
+    /// </summary>
+    public class TimeSpanCommandLineOptionParser : ICommandLineOptionParser<TimeSpan>
+    {
+        /// <summary>
+        /// Parses the specified <see cref="System.String"/> into a <see cref="System.TimeSpan"/>.
+        /// </summary>
+        /// <param name="parsedOption"></param>
+        /// <returns></returns>
+        public TimeSpan Parse(ParsedOption parsedOption) => TimeSpan.Parse(TrimAnyUnwantedCharacters(parsedOption.Value));
 
-		/// <summary>
-		/// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
-		/// </summary>
-		/// <param name="parsedOption"></param>
-		/// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
-		public bool CanParse(ParsedOption parsedOption)
-		{
-			TimeSpan dtOut;
-            return TimeSpan.TryParse(TrimAnyUnwantedCharacters(parsedOption.Value), out dtOut);
-		}
+        /// <summary>
+        /// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
+        /// </summary>
+        /// <param name="parsedOption"></param>
+        /// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
+        public bool CanParse(ParsedOption parsedOption)
+        {
+            return TimeSpan.TryParse(TrimAnyUnwantedCharacters(parsedOption.Value), out var dtOut);
+        }
 
         /// <summary>
         /// Trim any unwanted characters such as any remaining double quotes that can come through.
         /// </summary>
-	    private static string TrimAnyUnwantedCharacters(string value)
-	    {
-	        return (value ?? string.Empty).Trim('"');
-	    }
-	}
+	    private static string TrimAnyUnwantedCharacters(string value) => (value ?? string.Empty).Trim('"');
+    }
 }

@@ -22,11 +22,10 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
+using Fclp.Internals;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Runtime.InteropServices;
-using Fclp.Internals;
 
 namespace Fclp
 {
@@ -37,16 +36,16 @@ namespace Fclp
     /// </summary>
 	/// <typeparam name="TBuildType">The object type containing the argument properties to populate from parsed command line arguments.</typeparam>
 	public class FluentCommandLineParser<TBuildType> : IFluentCommandLineParser<TBuildType> where TBuildType : class
-	{
-		/// <summary>
-		/// Gets the <see cref="IFluentCommandLineParser"/>.
-		/// </summary>
-		public IFluentCommandLineParser Parser { get; private set; }
+    {
+        /// <summary>
+        /// Gets the <see cref="IFluentCommandLineParser"/>.
+        /// </summary>
+        public IFluentCommandLineParser Parser { get; private set; }
 
-		/// <summary>
-		/// Gets the constructed object.
-		/// </summary>
-		public TBuildType Object { get; private set; }
+        /// <summary>
+        /// Gets the constructed object.
+        /// </summary>
+        public TBuildType Object { get; private set; }
 
         /// <summary>
         /// Initialises a new instance of the <see cref="FluentCommandLineParser{TBuildType}"/> class.
@@ -54,19 +53,23 @@ namespace Fclp
         /// <exception cref="MissingMethodException">If <typeparamref name="TBuildType"/> does not have a parameterless constructor.</exception>
         public FluentCommandLineParser()
             : this(CreateArgsObject)
-		{
+        {
         }
 
-	    /// <summary>
+        /// <summary>
         /// Initialises a new instance of the <see cref="FluentCommandLineParser{TBuildType}"/> class.
         /// </summary>
         /// <param name="creator">Callback to create an instance of <typeparamref name="TBuildType"/>. This must not return <c>null</c>.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="creator"/> call returns <c>null</c>.</exception>
         public FluentCommandLineParser(Func<TBuildType> creator)
-	    {
-	        Object = creator();
-            if(Object == null) throw new ArgumentNullException(nameof(creator));
-	        Parser = new FluentCommandLineParser();
+        {
+            Object = creator();
+            if (Object == null)
+            {
+                throw new ArgumentNullException(nameof(creator));
+            }
+
+            Parser = new FluentCommandLineParser();
         }
 
         /// <summary>
@@ -75,109 +78,99 @@ namespace Fclp
         /// <returns>An instance of <typeparamref name="TBuildType"/>.</returns>
         /// <exception cref="MissingMethodException">If <typeparamref name="TBuildType"/> does not have a parameterless constructor.</exception>
 	    private static TBuildType CreateArgsObject()
-	    {
-	        Type theType = typeof(TBuildType); // if you know the type
+        {
+            var theType = typeof(TBuildType); // if you know the type
 
-	        if (theType.GetConstructor(Type.EmptyTypes) == null)
-	            throw new MissingMethodException(typeof(TBuildType).Name, "Parameterless constructor");
+            if (theType.GetConstructor(Type.EmptyTypes) == null)
+            {
+                throw new MissingMethodException(typeof(TBuildType).Name, "Parameterless constructor");
+            }
 
-	        return Activator.CreateInstance<TBuildType>();
-	    }
+            return Activator.CreateInstance<TBuildType>();
+        }
 
         /// <summary>
         /// Sets up an Option for a write-able property on the type being built.
         /// </summary>
-        public ICommandLineOptionBuilderFluent<TProperty> Setup<TProperty>(Expression<Func<TBuildType, TProperty>> propertyPicker)
-		{
-			return new CommandLineOptionBuilderFluent<TBuildType, TProperty>(Parser, Object, propertyPicker);
-		}
+        public ICommandLineOptionBuilderFluent<TProperty> Setup<TProperty>(Expression<Func<TBuildType, TProperty>> propertyPicker) => new CommandLineOptionBuilderFluent<TBuildType, TProperty>(Parser, Object, propertyPicker);
 
-		/// <summary>
-		/// Parses the specified <see><cref>T:System.String[]</cref></see> using the setup Options.
-		/// </summary>
-		/// <param name="args">The <see><cref>T:System.String[]</cref></see> to parse.</param>
-		/// <returns>An <see cref="ICommandLineParserResult"/> representing the results of the parse operation.</returns>
-		public ICommandLineParserResult Parse(string[] args)
-		{
-			return Parser.Parse(args);
-		}
+        /// <summary>
+        /// Parses the specified <see><cref>T:System.String[]</cref></see> using the setup Options.
+        /// </summary>
+        /// <param name="args">The <see><cref>T:System.String[]</cref></see> to parse.</param>
+        /// <returns>An <see cref="ICommandLineParserResult"/> representing the results of the parse operation.</returns>
+        public ICommandLineParserResult Parse(string[] args) => Parser.Parse(args);
 
-		/// <summary>
-		/// Setup the help args.
-		/// </summary>
-		/// <param name="helpArgs">The help arguments to register.</param>
-		public IHelpCommandLineOptionFluent SetupHelp(params string[] helpArgs)
-		{
-			return Parser.SetupHelp(helpArgs);
-		}
+        /// <summary>
+        /// Setup the help args.
+        /// </summary>
+        /// <param name="helpArgs">The help arguments to register.</param>
+        public IHelpCommandLineOptionFluent SetupHelp(params string[] helpArgs) => Parser.SetupHelp(helpArgs);
 
-		/// <summary>
-		/// Gets or sets whether values that differ by case are considered different. 
-		/// </summary>
-		public bool IsCaseSensitive
-		{
-			get { return Parser.IsCaseSensitive; }
-			set { Parser.IsCaseSensitive = value; }
-		}
+        /// <summary>
+        /// Gets or sets whether values that differ by case are considered different. 
+        /// </summary>
+        public bool IsCaseSensitive
+        {
+            get => Parser.IsCaseSensitive;
+            set => Parser.IsCaseSensitive = value;
+        }
 
         /// <summary>
         /// Gets or sets the option used for when help is detected in the command line args.
         /// </summary>
         public IHelpCommandLineOption HelpOption
         {
-            get { return Parser.HelpOption; }
-            set { Parser.HelpOption = value; }
+            get => Parser.HelpOption;
+            set => Parser.HelpOption = value;
         }
 
         /// <summary>
         /// Returns the Options that have been setup for this parser.
         /// </summary>
-        public IEnumerable<ICommandLineOption> Options
-        {
-            get { return Parser.Options; }
-        }
+        public IEnumerable<ICommandLineOption> Options => Parser.Options;
 
-	    /// <summary>
-	    /// Configures the <see cref="IFluentCommandLineParser"/> so that short and long options that differ by case are considered the same.
-	    /// </summary>
-	    /// <returns></returns>
+        /// <summary>
+        /// Configures the <see cref="IFluentCommandLineParser"/> so that short and long options that differ by case are considered the same.
+        /// </summary>
+        /// <returns></returns>
         public IFluentCommandLineParser<TBuildType> MakeCaseInsensitive()
-	    {
-	        Parser.MakeCaseInsensitive();
-	        return this;
-	    }
-
-	    /// <summary>
-	    /// Configures the <see cref="IFluentCommandLineParser"/> so that short options are treated the same as long options, thus
-	    /// unique short option behaviour is ignored.
-	    /// </summary>
-	    /// <returns></returns>
-        public IFluentCommandLineParser<TBuildType> DisableShortOptions()
-	    {
-	        Parser.DisableShortOptions();
+        {
+            Parser.MakeCaseInsensitive();
             return this;
         }
 
-	    /// <summary>
-	    /// Configures the <see cref="IFluentCommandLineParser"/> to use the specified option prefixes instead of the default.
-	    /// </summary>
-	    /// <param name="prefix"></param>
-	    /// <returns></returns>
-        public IFluentCommandLineParser<TBuildType> UseOwnOptionPrefix(params string[] prefix)
-	    {
-	        Parser.UseOwnOptionPrefix(prefix);
-	        return this;
-	    }
-
-	    /// <summary>
-	    /// Configures the <see cref="IFluentCommandLineParser"/> to skip the first of the specified arguments.
-	    /// This can be useful when Windows inserts the application name in the command line arguments for your application.
-	    /// </summary>
-	    /// <returns>this <see cref="IFluentCommandLineParser{TBuildType}"/></returns>
-	    public IFluentCommandLineParser<TBuildType> SkipFirstArg()
-	    {
-	        Parser.SkipFirstArg();
-	        return this;
+        /// <summary>
+        /// Configures the <see cref="IFluentCommandLineParser"/> so that short options are treated the same as long options, thus
+        /// unique short option behaviour is ignored.
+        /// </summary>
+        /// <returns></returns>
+        public IFluentCommandLineParser<TBuildType> DisableShortOptions()
+        {
+            Parser.DisableShortOptions();
+            return this;
         }
-	}
+
+        /// <summary>
+        /// Configures the <see cref="IFluentCommandLineParser"/> to use the specified option prefixes instead of the default.
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public IFluentCommandLineParser<TBuildType> UseOwnOptionPrefix(params string[] prefix)
+        {
+            Parser.UseOwnOptionPrefix(prefix);
+            return this;
+        }
+
+        /// <summary>
+        /// Configures the <see cref="IFluentCommandLineParser"/> to skip the first of the specified arguments.
+        /// This can be useful when Windows inserts the application name in the command line arguments for your application.
+        /// </summary>
+        /// <returns>this <see cref="IFluentCommandLineParser{TBuildType}"/></returns>
+        public IFluentCommandLineParser<TBuildType> SkipFirstArg()
+        {
+            Parser.SkipFirstArg();
+            return this;
+        }
+    }
 }

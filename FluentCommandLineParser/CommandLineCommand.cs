@@ -1,17 +1,17 @@
+using Fclp.Internals;
+using Fclp.Internals.Validators;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq.Expressions;
-using Fclp.Internals;
-using Fclp.Internals.Validators;
 
 namespace Fclp
 {
-    class CommandLineCommand<TBuildType> : ICommandLineOptionSetupFactory, ICommandLineCommandT<TBuildType>, ICommandLineCommandFluent<TBuildType> where TBuildType : new()
+    internal class CommandLineCommand<TBuildType> : ICommandLineOptionSetupFactory, ICommandLineCommandT<TBuildType>, ICommandLineCommandFluent<TBuildType> where TBuildType : new()
     {
-        List<ICommandLineOption> _options;
-        ICommandLineOptionFactory _optionFactory;
-        ICommandLineOptionValidator _optionValidator;
+        private List<ICommandLineOption> _options;
+        private ICommandLineOptionFactory _optionFactory;
+        private ICommandLineOptionValidator _optionValidator;
 
         public CommandLineCommand(IFluentCommandLineParser parser)
         {
@@ -42,18 +42,12 @@ namespace Fclp
         /// <summary>
         /// Gets the list of Options setup for this command.
         /// </summary>
-        public IEnumerable<ICommandLineOption> Options
-        {
-            get { return _options ?? (_options = new List<ICommandLineOption>()); }
-        }
+        public IEnumerable<ICommandLineOption> Options => _options ?? (_options = new List<ICommandLineOption>());
 
         /// <summary>
         /// Gets whether the command has a callback
         /// </summary>
-        public bool HasSuccessCallback
-        {
-            get { return SuccessCallback != null; }
-        }
+        public bool HasSuccessCallback => SuccessCallback != null;
 
         /// <summary>
         /// Executes the callback
@@ -61,7 +55,9 @@ namespace Fclp
         public void ExecuteOnSuccess()
         {
             if (HasSuccessCallback)
+            {
                 SuccessCallback(Object);
+            }
         }
 
         /// <summary>
@@ -69,8 +65,8 @@ namespace Fclp
         /// </summary>
         public ICommandLineOptionValidator OptionValidator
         {
-            get { return _optionValidator ?? (_optionValidator = new CommandLineOptionValidator(this, Parser.SpecialCharacters)); }
-            set { _optionValidator = value; }
+            get => _optionValidator ?? (_optionValidator = new CommandLineOptionValidator(this, Parser.SpecialCharacters));
+            set => _optionValidator = value;
         }
 
         /// <summary>
@@ -79,8 +75,8 @@ namespace Fclp
         /// <remarks>If this property is set to <c>null</c> then the default <see cref="OptionFactory"/> is returned.</remarks>
         public ICommandLineOptionFactory OptionFactory
         {
-            get { return _optionFactory ?? (_optionFactory = new CommandLineOptionFactory()); }
-            set { _optionFactory = value; }
+            get => _optionFactory ?? (_optionFactory = new CommandLineOptionFactory());
+            set => _optionFactory = value;
         }
 
         public ICommandLineCommandFluent<TBuildType> OnSuccess(Action<TBuildType> callback)
@@ -89,32 +85,22 @@ namespace Fclp
             return this;
         }
 
-        public ICommandLineOptionBuilderFluent<TProperty> Setup<TProperty>(Expression<Func<TBuildType, TProperty>> propertyPicker)
-        {
-            return new CommandLineOptionBuilderFluent<TBuildType, TProperty>(this, Object, propertyPicker, this);
-        }
+        public ICommandLineOptionBuilderFluent<TProperty> Setup<TProperty>(Expression<Func<TBuildType, TProperty>> propertyPicker) => new CommandLineOptionBuilderFluent<TBuildType, TProperty>(this, Object, propertyPicker, this);
 
-        public ICommandLineOptionFluent<T> Setup<T>(char shortOption, string longOption)
-        {
-            return SetupInternal<T>(shortOption.ToString(CultureInfo.InvariantCulture), longOption);
-        }
+        public ICommandLineOptionFluent<T> Setup<T>(char shortOption, string longOption) => SetupInternal<T>(shortOption.ToString(CultureInfo.InvariantCulture), longOption);
 
-        public ICommandLineOptionFluent<T> Setup<T>(char shortOption)
-        {
-            return SetupInternal<T>(shortOption.ToString(CultureInfo.InvariantCulture), null);
-        }
+        public ICommandLineOptionFluent<T> Setup<T>(char shortOption) => SetupInternal<T>(shortOption.ToString(CultureInfo.InvariantCulture), null);
 
-        public ICommandLineOptionFluent<T> Setup<T>(string longOption)
-        {
-            return SetupInternal<T>(null, longOption);
-        }
+        public ICommandLineOptionFluent<T> Setup<T>(string longOption) => SetupInternal<T>(null, longOption);
 
         private ICommandLineOptionFluent<T> SetupInternal<T>(string shortOption, string longOption)
         {
-            var argOption = this.OptionFactory.CreateOption<T>(shortOption, longOption);
+            var argOption = OptionFactory.CreateOption<T>(shortOption, longOption);
 
             if (argOption == null)
+            {
                 throw new InvalidOperationException("OptionFactory is producing unexpected results.");
+            }
 
             OptionValidator.Validate(argOption, Parser.IsCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase);
 

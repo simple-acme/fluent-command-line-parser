@@ -41,7 +41,11 @@ namespace Fclp.Internals.Parsing.OptionParsers
         public NullableEnumCommandLineOptionParser(ICommandLineOptionParserFactory parserFactory)
         {
             var type = typeof(TEnum);
-            if (!type.IsEnum) throw new ArgumentException(string.Format("T must be an System.Enum but is '{0}'", type));
+            if (!type.IsEnum)
+            {
+                throw new ArgumentException(string.Format("T must be an System.Enum but is '{0}'", type));
+            }
+
             _parserFactory = parserFactory;
         }
 
@@ -52,7 +56,11 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// <returns>The parsed value.</returns>
         public TEnum? Parse(ParsedOption parsedOption)
         {
-            if (parsedOption.HasValue == false) return null;
+            if (parsedOption.HasValue == false)
+            {
+                return null;
+            }
+
             var parser = _parserFactory.CreateParser<TEnum>();
             return parser.Parse(parsedOption);
         }
@@ -64,8 +72,15 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
         public bool CanParse(ParsedOption parsedOption)
         {
-            if (parsedOption == null) return false;
-            if (parsedOption.HasValue == false) return true;
+            if (parsedOption == null)
+            {
+                return false;
+            }
+
+            if (parsedOption.HasValue == false)
+            {
+                return true;
+            }
 
             var parser = _parserFactory.CreateParser<TEnum>();
 

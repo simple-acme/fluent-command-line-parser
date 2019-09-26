@@ -22,76 +22,76 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
-using System;
 using Fclp.Internals.Parsing;
+using System;
 
 namespace Fclp.Internals
 {
-	/// <summary>
-	/// Represents a setup command line Option
-	/// </summary>
-	public interface ICommandLineOption
-	{
-		/// <summary>
-		/// Gets whether this <see cref="ICommandLineOption"/> is required.
-		/// </summary>
-		bool IsRequired { get; }
+    /// <summary>
+    /// Represents a setup command line Option
+    /// </summary>
+    public interface ICommandLineOption
+    {
+        /// <summary>
+        /// Gets whether this <see cref="ICommandLineOption"/> is required.
+        /// </summary>
+        bool IsRequired { get; }
 
-		/// <summary>
-		/// Gets the description set for this <see cref="ICommandLineOption"/>.
-		/// </summary>
-		string Description { get; }
+        /// <summary>
+        /// Gets the description set for this <see cref="ICommandLineOption"/>.
+        /// </summary>
+        string Description { get; }
 
-		/// <summary>
-		/// Binds the specified <see cref="System.String"/> to this <see cref="ICommandLineOption"/>.
-		/// </summary>
-		/// <param name="value">The <see cref="System.String"/> to bind.</param>
-		void Bind(ParsedOption value);
+        /// <summary>
+        /// Binds the specified <see cref="System.String"/> to this <see cref="ICommandLineOption"/>.
+        /// </summary>
+        /// <param name="value">The <see cref="System.String"/> to bind.</param>
+        void Bind(ParsedOption value);
 
-		/// <summary>
-		/// Binds the default value for this <see cref="ICommandLineOption"/> if available.
-		/// </summary>
-		void BindDefault();
+        /// <summary>
+        /// Binds the default value for this <see cref="ICommandLineOption"/> if available.
+        /// </summary>
+        void BindDefault();
 
-		/// <summary>
-		/// Gets the short name of this <see cref="ICommandLineOption"/>.
-		/// </summary>
-		string ShortName { get; }
+        /// <summary>
+        /// Gets the short name of this <see cref="ICommandLineOption"/>.
+        /// </summary>
+        string ShortName { get; }
 
-		/// <summary>
-		/// Gets the long name of this <see cref="ICommandLineOption"/>.
-		/// </summary>
-		string LongName { get; }
+        /// <summary>
+        /// Gets the long name of this <see cref="ICommandLineOption"/>.
+        /// </summary>
+        string LongName { get; }
 
-		/// <summary>
-		/// Gets whether this <see cref="ICommandLineOption"/> has a long name.
-		/// </summary>
-		bool HasLongName { get; }
+        /// <summary>
+        /// Gets whether this <see cref="ICommandLineOption"/> has a long name.
+        /// </summary>
+        bool HasLongName { get; }
 
-		/// <summary>
-		/// Gets whether this <see cref="ICommandLineOption"/> has a short name.
-		/// </summary>
-		bool HasShortName { get; }
+        /// <summary>
+        /// Gets whether this <see cref="ICommandLineOption"/> has a short name.
+        /// </summary>
+        bool HasShortName { get; }
 
-		/// <summary>
-		/// Gets whether this <see cred="ICommandLineOption"/> has a callback setup.
-		/// </summary>
-		bool HasCallback { get; }
+        /// <summary>
+        /// Gets whether this <see cred="ICommandLineOption"/> has a callback setup.
+        /// </summary>
+        bool HasCallback { get; }
 
-		/// <summary>
-		/// Gets whether this <see cref="ICommandLineOption"/> has an additional arguments callback setup.
-		/// </summary>
-		bool HasAdditionalArgumentsCallback { get; }
+        /// <summary>
+        /// Gets whether this <see cref="ICommandLineOption"/> has an additional arguments callback setup.
+        /// </summary>
+        bool HasAdditionalArgumentsCallback { get; }
 
-		/// <summary>
-		/// Gets whether this <see cref="ICommandLineOption"/> has a default value setup.
-		/// </summary>
-		bool HasDefault { get; }
+        /// <summary>
+        /// Gets whether this <see cref="ICommandLineOption"/> has a default value setup.
+        /// </summary>
+        bool HasDefault { get; }
 
-		/// <summary>
-		/// Gets the setup <see cref="System.Type"/> for this option.
-		/// </summary>
-		Type SetupType { get; }
+        /// <summary>
+        /// Gets the setup <see cref="System.Type"/> for this option.
+        /// </summary>
+        Type SetupType { get; }
 
         /// <summary>
         /// Gets or sets the command this options belongs too.
@@ -108,10 +108,10 @@ namespace Fclp.Internals
         /// </summary>
 	    bool HasCommand { get; }
 
-	    /// <summary>
-	    /// Gets the default value set for this options
-	    /// </summary>
-	    /// <returns>The default value set or <c>null</c> if no value has been set</returns>
-	    object GetDefaultValue();
-	}
+        /// <summary>
+        /// Gets the default value set for this options
+        /// </summary>
+        /// <returns>The default value set or <c>null</c> if no value has been set</returns>
+        object GetDefaultValue();
+    }
 }

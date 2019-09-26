@@ -22,29 +22,29 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
+using Fclp.Internals.Parsing;
 using System;
 using System.Collections.Generic;
-using Fclp.Internals.Parsing;
 
 namespace Fclp.Internals
 {
-	/// <summary>
-	/// Represents a command line option that determines whether to show the help text.
-	/// </summary>
-	public interface IHelpCommandLineOption
-	{
-		/// <summary>
-		/// Determines whether the help text should be shown.
-		/// </summary>
-		/// <param name="parsedOptions">The parsed command line arguments</param>
-		/// <param name="comparisonType">The type of comparison to use when comparing Option names.</param>
-		/// <returns>true if the parser operation should cease and <see cref="ShowHelp"/> should be called; otherwise false if the parse operation to continue.</returns>
-		bool ShouldShowHelp(IEnumerable<ParsedOption> parsedOptions, StringComparison comparisonType);
+    /// <summary>
+    /// Represents a command line option that determines whether to show the help text.
+    /// </summary>
+    public interface IHelpCommandLineOption
+    {
+        /// <summary>
+        /// Determines whether the help text should be shown.
+        /// </summary>
+        /// <param name="parsedOptions">The parsed command line arguments</param>
+        /// <param name="comparisonType">The type of comparison to use when comparing Option names.</param>
+        /// <returns>true if the parser operation should cease and <see cref="ShowHelp"/> should be called; otherwise false if the parse operation to continue.</returns>
+        bool ShouldShowHelp(IEnumerable<ParsedOption> parsedOptions, StringComparison comparisonType);
 
-		/// <summary>
-		/// Shows the help text for the specified registered options.
-		/// </summary>
-		/// <param name="options">The options to generate the help text for.</param>
-		void ShowHelp(IEnumerable<ICommandLineOption> options);
-	}
+        /// <summary>
+        /// Shows the help text for the specified registered options.
+        /// </summary>
+        /// <param name="options">The options to generate the help text for.</param>
+        void ShowHelp(IEnumerable<ICommandLineOption> options);
+    }
 }

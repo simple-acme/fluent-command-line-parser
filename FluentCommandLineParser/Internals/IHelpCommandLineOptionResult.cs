@@ -23,11 +23,11 @@
 #endregion
 namespace Fclp.Internals
 {
-	/// <summary>
-	/// Used to encapsulate both help command option interfaces which are returned from the factory.
-	/// </summary>
-	public interface IHelpCommandLineOptionResult : IHelpCommandLineOption, IHelpCommandLineOptionFluent
-	{
-		
-	}
+    /// <summary>
+    /// Used to encapsulate both help command option interfaces which are returned from the factory.
+    /// </summary>
+    public interface IHelpCommandLineOptionResult : IHelpCommandLineOption, IHelpCommandLineOptionFluent
+    {
+
+    }
 }

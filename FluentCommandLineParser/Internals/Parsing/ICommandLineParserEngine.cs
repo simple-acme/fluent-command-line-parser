@@ -24,17 +24,17 @@
 
 namespace Fclp.Internals.Parsing
 {
-	/// <summary>
-	/// Responsible for parsing command line arguments into simple key and value pairs.
-	/// </summary>
-	public interface ICommandLineParserEngine
-	{
-	    /// <summary>
-	    /// Parses the specified <see><cref>T:System.String[]</cref></see> into key value pairs.
-	    /// </summary>
-	    /// <param name="args">The <see><cref>T:System.String[]</cref></see> to parse.</param>
-	    /// <param name="parseCommands">true to parse any commands, false to skip commands.</param>
-	    /// <returns>An <see cref="ICommandLineParserResult"/> representing the results of the parse operation.</returns>
-	    ParserEngineResult Parse(string[] args, bool parseCommands);
-	}
+    /// <summary>
+    /// Responsible for parsing command line arguments into simple key and value pairs.
+    /// </summary>
+    public interface ICommandLineParserEngine
+    {
+        /// <summary>
+        /// Parses the specified <see><cref>T:System.String[]</cref></see> into key value pairs.
+        /// </summary>
+        /// <param name="args">The <see><cref>T:System.String[]</cref></see> to parse.</param>
+        /// <param name="parseCommands">true to parse any commands, false to skip commands.</param>
+        /// <returns>An <see cref="ICommandLineParserResult"/> representing the results of the parse operation.</returns>
+        ParserEngineResult Parse(string[] args, bool parseCommands);
+    }
 }

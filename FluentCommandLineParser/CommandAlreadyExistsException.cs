@@ -19,7 +19,7 @@ namespace Fclp
         /// </summary>
         /// <param name="commandName"></param>
         public CommandAlreadyExistsException(string commandName) : base(commandName) { }
-		
+
         /// <summary>
         /// Initialises a new instance of the <see cref="OptionAlreadyExistsException"/> class.
         /// </summary>
@@ -27,7 +27,7 @@ namespace Fclp
         /// <param name="context"></param>
         public CommandAlreadyExistsException(SerializationInfo info, StreamingContext context)
             : base(info, context) { }
-		
+
         /// <summary>
         /// Initialises a new instance of the <see cref="OptionAlreadyExistsException"/> class.
         /// </summary>

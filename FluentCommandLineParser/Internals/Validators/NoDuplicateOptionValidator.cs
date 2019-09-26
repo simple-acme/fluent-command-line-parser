@@ -24,7 +24,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Fclp.Internals.Validators
 {
@@ -39,22 +38,26 @@ namespace Fclp.Internals.Validators
         IEnumerable<ICommandLineOption> Options { get; }
     }
 
-	/// <summary>
-	/// Validator used to ensure no there are duplicate Options setup.
-	/// </summary>
-	public class NoDuplicateOptionValidator : ICommandLineOptionValidator
-	{
+    /// <summary>
+    /// Validator used to ensure no there are duplicate Options setup.
+    /// </summary>
+    public class NoDuplicateOptionValidator : ICommandLineOptionValidator
+    {
         private readonly ICommandLineOptionContainer _container;
 
-		/// <summary>
-		/// Initialises a new instance of the <see cref="NoDuplicateOptionValidator"/> class.
-		/// </summary>
+        /// <summary>
+        /// Initialises a new instance of the <see cref="NoDuplicateOptionValidator"/> class.
+        /// </summary>
         /// <param name="container">The <see cref="IFluentCommandLineParser"/> containing the setup options. This must not be null.</param>
         public NoDuplicateOptionValidator(ICommandLineOptionContainer container)
-		{
-            if (container == null) throw new ArgumentNullException("container");
+        {
+            if (container == null)
+            {
+                throw new ArgumentNullException("container");
+            }
+
             _container = container;
-		}
+        }
 
         ///// <summary>
         ///// Gets the <see cref="StringComparison"/> type used for duplicates.
@@ -64,19 +67,19 @@ namespace Fclp.Internals.Validators
         //    get { return _container.IsCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase; }
         //}
 
-	    /// <summary>
-	    /// Verifies that the specified <see cref="ICommandLineOption"/> will not cause any duplication.
-	    /// </summary>
-	    /// <param name="commandLineOption">The <see cref="ICommandLineOption"/> to validate.</param>
-	    /// <param name="stringComparison"></param>
-	    public void Validate(ICommandLineOption commandLineOption, StringComparison stringComparison)
-		{
+        /// <summary>
+        /// Verifies that the specified <see cref="ICommandLineOption"/> will not cause any duplication.
+        /// </summary>
+        /// <param name="commandLineOption">The <see cref="ICommandLineOption"/> to validate.</param>
+        /// <param name="stringComparison"></param>
+        public void Validate(ICommandLineOption commandLineOption, StringComparison stringComparison)
+        {
             foreach (var option in _container.Options)
-			{
-			    if (option.HasCommand)
-			    {
-			        if (CommandsAreEqual(option.Command, commandLineOption.Command, stringComparison))
-			        {
+            {
+                if (option.HasCommand)
+                {
+                    if (CommandsAreEqual(option.Command, commandLineOption.Command, stringComparison))
+                    {
                         if (string.IsNullOrEmpty(commandLineOption.ShortName) == false)
                         {
                             ValuesAreEqual(commandLineOption.ShortName, option.ShortName, stringComparison);
@@ -87,9 +90,9 @@ namespace Fclp.Internals.Validators
                             ValuesAreEqual(commandLineOption.LongName, option.LongName, stringComparison);
                         }
                     }
-			    }
-			    else
-			    {
+                }
+                else
+                {
                     if (string.IsNullOrEmpty(commandLineOption.ShortName) == false)
                     {
                         ValuesAreEqual(commandLineOption.ShortName, option.ShortName, stringComparison);
@@ -100,24 +103,36 @@ namespace Fclp.Internals.Validators
                         ValuesAreEqual(commandLineOption.LongName, option.LongName, stringComparison);
                     }
                 }
-			
-			}
-		}
+
+            }
+        }
 
         private void ValuesAreEqual(string value, string otherValue, StringComparison stringComparison)
-		{
+        {
             if (string.Equals(value, otherValue, stringComparison))
-			{
-				throw new OptionAlreadyExistsException(value);
-			}
-		}
+            {
+                throw new OptionAlreadyExistsException(value);
+            }
+        }
 
         private bool CommandsAreEqual(ICommandLineCommand command, ICommandLineCommand otherCommand, StringComparison stringComparison)
         {
-            if (command == null && otherCommand == null) return true;
-            if (command == null) return false;
-            if (otherCommand == null) return false;
+            if (command == null && otherCommand == null)
+            {
+                return true;
+            }
+
+            if (command == null)
+            {
+                return false;
+            }
+
+            if (otherCommand == null)
+            {
+                return false;
+            }
+
             return string.Equals(command.Name, otherCommand.Name, stringComparison);
-	    }
-	}
+        }
+    }
 }

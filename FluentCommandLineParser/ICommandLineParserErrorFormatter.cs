@@ -26,23 +26,23 @@ using System.Collections.Generic;
 
 namespace Fclp
 {
-	/// <summary>
-	/// Represents a formatter used to format parser errors for display to the end user.
-	/// </summary>
-	public interface ICommandLineParserErrorFormatter
-	{
-		/// <summary>
-		/// Formats the specified <see cref="ICommandLineParserError"/> to a <see cref="System.String"/> suitable for the end user.
-		/// </summary>
-		/// <param name="parserError">The error to format. This must not be null.</param>
-		/// <returns>A <see cref="System.String"/> describing the specified error.</returns>
-		string Format(ICommandLineParserError parserError);
+    /// <summary>
+    /// Represents a formatter used to format parser errors for display to the end user.
+    /// </summary>
+    public interface ICommandLineParserErrorFormatter
+    {
+        /// <summary>
+        /// Formats the specified <see cref="ICommandLineParserError"/> to a <see cref="System.String"/> suitable for the end user.
+        /// </summary>
+        /// <param name="parserError">The error to format. This must not be null.</param>
+        /// <returns>A <see cref="System.String"/> describing the specified error.</returns>
+        string Format(ICommandLineParserError parserError);
 
-		/// <summary>
-		/// Formats the specified list of <see cref="ICommandLineParserError"/> to a <see cref="System.String"/> suitable for the end user.
-		/// </summary>
-		/// <param name="parserErrors">The errors to format.</param>
-		/// <returns>A <see cref="System.String"/> describing the specified errors.</returns>
-		string Format(IEnumerable<ICommandLineParserError> parserErrors);
-	}
+        /// <summary>
+        /// Formats the specified list of <see cref="ICommandLineParserError"/> to a <see cref="System.String"/> suitable for the end user.
+        /// </summary>
+        /// <param name="parserErrors">The errors to format.</param>
+        /// <returns>A <see cref="System.String"/> describing the specified errors.</returns>
+        string Format(IEnumerable<ICommandLineParserError> parserErrors);
+    }
 }

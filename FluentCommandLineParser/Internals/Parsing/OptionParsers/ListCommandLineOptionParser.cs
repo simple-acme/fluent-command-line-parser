@@ -27,60 +27,64 @@ using System.Linq;
 
 namespace Fclp.Internals.Parsing.OptionParsers
 {
-/// <summary>
-/// 
-/// </summary>
-/// <typeparam name="T"></typeparam>
-public class ListCommandLineOptionParser<T> : ICommandLineOptionParser<List<T>>
-{
-    private readonly ICommandLineOptionParserFactory _parserFactory;
-
     /// <summary>
-    /// Initialises a new instance of the <see cref="ListCommandLineOptionParser{T}"/>.
+    /// 
     /// </summary>
-    /// <param name="parserFactory"></param>
-    public ListCommandLineOptionParser(ICommandLineOptionParserFactory parserFactory)
+    /// <typeparam name="T"></typeparam>
+    public class ListCommandLineOptionParser<T> : ICommandLineOptionParser<List<T>>
     {
-        _parserFactory = parserFactory;
-    }
+        private readonly ICommandLineOptionParserFactory _parserFactory;
 
-    /// <summary>
-    /// Parses the specified <see cref="System.String"/> into the return type.
-    /// </summary>
-    /// <param name="parsedOption"></param>
-    /// <returns>The parsed value.</returns>
-    public List<T> Parse(ParsedOption parsedOption)
-    {
-        var parser = _parserFactory.CreateParser<T>();
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ListCommandLineOptionParser{T}"/>.
+        /// </summary>
+        /// <param name="parserFactory"></param>
+        public ListCommandLineOptionParser(ICommandLineOptionParserFactory parserFactory) => _parserFactory = parserFactory;
 
-        return parsedOption.Values.Select(value =>
+        /// <summary>
+        /// Parses the specified <see cref="System.String"/> into the return type.
+        /// </summary>
+        /// <param name="parsedOption"></param>
+        /// <returns>The parsed value.</returns>
+        public List<T> Parse(ParsedOption parsedOption)
         {
-            var clone = parsedOption.Clone();
-            clone.Value = value;
-            return parser.Parse(clone);
-        }).ToList();
-    }
+            var parser = _parserFactory.CreateParser<T>();
 
-    /// <summary>
-    /// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
-    /// </summary>
-    /// <param name="parsedOption"></param>
-    /// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
-    public bool CanParse(ParsedOption parsedOption)
-    {
-        if (parsedOption == null) return false;
-        if (parsedOption.HasValue == false) return false;
+            return parsedOption.Values.Select(value =>
+            {
+                var clone = parsedOption.Clone();
+                clone.Value = value;
+                return parser.Parse(clone);
+            }).ToList();
+        }
 
-        var parser = _parserFactory.CreateParser<T>();
-
-        return parsedOption.Values.All(value =>
+        /// <summary>
+        /// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
+        /// </summary>
+        /// <param name="parsedOption"></param>
+        /// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
+        public bool CanParse(ParsedOption parsedOption)
         {
-            var clone = parsedOption.Clone();
-            clone.Value = value;
-            clone.Values = new [] { value };
-            clone.AdditionalValues = new string[0];
-            return parser.CanParse(clone);
-        });
+            if (parsedOption == null)
+            {
+                return false;
+            }
+
+            if (parsedOption.HasValue == false)
+            {
+                return false;
+            }
+
+            var parser = _parserFactory.CreateParser<T>();
+
+            return parsedOption.Values.All(value =>
+            {
+                var clone = parsedOption.Clone();
+                clone.Value = value;
+                clone.Values = new[] { value };
+                clone.AdditionalValues = new string[0];
+                return parser.CanParse(clone);
+            });
+        }
     }
-}
 }

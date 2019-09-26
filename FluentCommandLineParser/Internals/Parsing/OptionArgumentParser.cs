@@ -22,58 +22,59 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
+using Fclp.Internals.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Fclp.Internals.Extensions;
 
 namespace Fclp.Internals.Parsing
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class OptionArgumentParser
-	{
-	    private readonly SpecialCharacters _specialCharacters;
+    /// <summary>
+    /// 
+    /// </summary>
+    public class OptionArgumentParser
+    {
+        private readonly SpecialCharacters _specialCharacters;
 
         /// <summary>
         /// Initialises a new instance of <see cref="OptionArgumentParser"/>.
         /// </summary>
         /// <param name="specialCharacters"></param>
-        public OptionArgumentParser(SpecialCharacters specialCharacters)
-	    {
-	        _specialCharacters = specialCharacters;
-	    }
+        public OptionArgumentParser(SpecialCharacters specialCharacters) => _specialCharacters = specialCharacters;
 
-	    /// <summary>
-		/// Parses the values.
-		/// </summary>
-		/// <param name="args">The args.</param>
-		/// <param name="option">The option.</param>
-		public void ParseArguments(IEnumerable<string> args, ParsedOption option)
-		{
-			if (option.Key != null && _specialCharacters.ValueAssignments.Any(option.Key.Contains))
-			{
-				TryGetArgumentFromKey(option);
-			}
+        /// <summary>
+        /// Parses the values.
+        /// </summary>
+        /// <param name="args">The args.</param>
+        /// <param name="option">The option.</param>
+        public void ParseArguments(IEnumerable<string> args, ParsedOption option)
+        {
+            if (option.Key != null && _specialCharacters.ValueAssignments.Any(option.Key.Contains))
+            {
+                TryGetArgumentFromKey(option);
+            }
 
-			var allArguments = new List<string>();
-			var additionalArguments = new List<string>();
+            var allArguments = new List<string>();
+            var additionalArguments = new List<string>();
 
-			var otherArguments = CollectArgumentsUntilNextKey(args).ToList();
+            var otherArguments = CollectArgumentsUntilNextKey(args).ToList();
 
-			if (option.HasValue) allArguments.Add(option.Value);
-			if (otherArguments.Any())
-			{
-				allArguments.AddRange(otherArguments);
+            if (option.HasValue)
+            {
+                allArguments.Add(option.Value);
+            }
+
+            if (otherArguments.Any())
+            {
+                allArguments.AddRange(otherArguments);
                 if (otherArguments.Count() > 1)
                 {
                     additionalArguments.AddRange(otherArguments);
                     additionalArguments.RemoveAt(0);
                 }
             }
-            if (allArguments.Count > 1 && 
-                allArguments.First().StartsWith("\"") && 
+            if (allArguments.Count > 1 &&
+                allArguments.First().StartsWith("\"") &&
                 allArguments.Last().EndsWith("\""))
             {
                 option.Value = string.Join(" ", allArguments.ToArray());
@@ -83,33 +84,30 @@ namespace Fclp.Internals.Parsing
                 option.Value = allArguments.FirstOrDefault();
             }
             option.Value = string.Join(" ", allArguments.ToArray());
-			option.Values = allArguments.ToArray();
-			option.AdditionalValues = additionalArguments.ToArray();
-		}
+            option.Values = allArguments.ToArray();
+            option.AdditionalValues = additionalArguments.ToArray();
+        }
 
-		private void TryGetArgumentFromKey(ParsedOption option)
-		{
-			var split = option.Key.Split(_specialCharacters.ValueAssignments, 2, StringSplitOptions.RemoveEmptyEntries);
+        private void TryGetArgumentFromKey(ParsedOption option)
+        {
+            var split = option.Key.Split(_specialCharacters.ValueAssignments, 2, StringSplitOptions.RemoveEmptyEntries);
 
-			option.Key = split[0];
-			option.Value = split.Length > 1 
-				               ? split[1].WrapInDoubleQuotesIfContainsWhitespace()
-				               : null;
-		}
+            option.Key = split[0];
+            option.Value = split.Length > 1
+                               ? split[1].WrapInDoubleQuotesIfContainsWhitespace()
+                               : null;
+        }
 
-	    private IEnumerable<string> CollectArgumentsUntilNextKey(IEnumerable<string> args)
-		{
-			return from argument in args
-			       where !IsEndOfOptionsKey(argument)
-			       select argument.WrapInDoubleQuotesIfContainsWhitespace();
-		}
+        private IEnumerable<string> CollectArgumentsUntilNextKey(IEnumerable<string> args)
+        {
+            return from argument in args
+                   where !IsEndOfOptionsKey(argument)
+                   select argument.WrapInDoubleQuotesIfContainsWhitespace();
+        }
 
         /// <summary>
         /// Determines whether the specified string indicates the end of parsed options.
         /// </summary>
-        private bool IsEndOfOptionsKey(string arg)
-		{
-			return string.Equals(arg, _specialCharacters.EndOfOptionsKey, StringComparison.InvariantCultureIgnoreCase);
-		}
-	}
+        private bool IsEndOfOptionsKey(string arg) => string.Equals(arg, _specialCharacters.EndOfOptionsKey, StringComparison.InvariantCultureIgnoreCase);
+    }
 }

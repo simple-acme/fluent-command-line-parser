@@ -37,29 +37,29 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// </summary>
         public CommandLineOptionParserFactory()
         {
-            this.Parsers = new Dictionary<Type, object>();
-            this.AddOrReplace(new BoolCommandLineOptionParser());
-            this.AddOrReplace(new Int32CommandLineOptionParser());
-            this.AddOrReplace(new Int64CommandLineOptionParser());
-            this.AddOrReplace(new StringCommandLineOptionParser());
-            this.AddOrReplace(new DateTimeCommandLineOptionParser());
-            this.AddOrReplace(new TimeSpanCommandLineOptionParser());
-            this.AddOrReplace(new DoubleCommandLineOptionParser());
-            this.AddOrReplace(new UriCommandLineOptionParser());
-            this.AddOrReplace(new ListCommandLineOptionParser<string>(this));
-            this.AddOrReplace(new ListCommandLineOptionParser<int>(this));
-            this.AddOrReplace(new ListCommandLineOptionParser<long>(this));
-            this.AddOrReplace(new ListCommandLineOptionParser<double>(this));
-            this.AddOrReplace(new ListCommandLineOptionParser<DateTime>(this));
-            this.AddOrReplace(new ListCommandLineOptionParser<TimeSpan>(this));
-            this.AddOrReplace(new ListCommandLineOptionParser<bool>(this));
-            this.AddOrReplace(new ListCommandLineOptionParser<Uri>(this));
-            this.AddOrReplace(new NullableCommandLineOptionParser<bool>(this));
-            this.AddOrReplace(new NullableCommandLineOptionParser<int>(this));
-            this.AddOrReplace(new NullableCommandLineOptionParser<long>(this));
-            this.AddOrReplace(new NullableCommandLineOptionParser<double>(this));
-            this.AddOrReplace(new NullableCommandLineOptionParser<DateTime>(this));
-            this.AddOrReplace(new NullableCommandLineOptionParser<TimeSpan>(this));
+            Parsers = new Dictionary<Type, object>();
+            AddOrReplace(new BoolCommandLineOptionParser());
+            AddOrReplace(new Int32CommandLineOptionParser());
+            AddOrReplace(new Int64CommandLineOptionParser());
+            AddOrReplace(new StringCommandLineOptionParser());
+            AddOrReplace(new DateTimeCommandLineOptionParser());
+            AddOrReplace(new TimeSpanCommandLineOptionParser());
+            AddOrReplace(new DoubleCommandLineOptionParser());
+            AddOrReplace(new UriCommandLineOptionParser());
+            AddOrReplace(new ListCommandLineOptionParser<string>(this));
+            AddOrReplace(new ListCommandLineOptionParser<int>(this));
+            AddOrReplace(new ListCommandLineOptionParser<long>(this));
+            AddOrReplace(new ListCommandLineOptionParser<double>(this));
+            AddOrReplace(new ListCommandLineOptionParser<DateTime>(this));
+            AddOrReplace(new ListCommandLineOptionParser<TimeSpan>(this));
+            AddOrReplace(new ListCommandLineOptionParser<bool>(this));
+            AddOrReplace(new ListCommandLineOptionParser<Uri>(this));
+            AddOrReplace(new NullableCommandLineOptionParser<bool>(this));
+            AddOrReplace(new NullableCommandLineOptionParser<int>(this));
+            AddOrReplace(new NullableCommandLineOptionParser<long>(this));
+            AddOrReplace(new NullableCommandLineOptionParser<double>(this));
+            AddOrReplace(new NullableCommandLineOptionParser<DateTime>(this));
+            AddOrReplace(new NullableCommandLineOptionParser<TimeSpan>(this));
         }
 
         internal Dictionary<Type, object> Parsers { get; set; }
@@ -73,14 +73,17 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// <exception cref="ArgumentNullException">If <paramref name="parser"/> is <c>null</c>.</exception>
         public void AddOrReplace<T>(ICommandLineOptionParser<T> parser)
         {
-            if (parser == null) throw new ArgumentNullException("parser");
+            if (parser == null)
+            {
+                throw new ArgumentNullException("parser");
+            }
 
             var parserType = typeof(T);
 
             // remove existing
-            this.Parsers.Remove(parserType);
+            Parsers.Remove(parserType);
 
-            this.Parsers.Add(parserType, parser);
+            Parsers.Add(parserType, parser);
         }
 
         /// <summary>
@@ -93,7 +96,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         {
             var type = typeof(T);
 
-            if (!this.Parsers.ContainsKey(type))
+            if (!Parsers.ContainsKey(type))
             {
                 if (!TryAddAsSpecialParser<T>(type))
                 {
@@ -101,7 +104,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
                 }
             }
 
-            return (ICommandLineOptionParser<T>)this.Parsers[type];
+            return (ICommandLineOptionParser<T>)Parsers[type];
         }
 
         /// <summary>
@@ -112,21 +115,21 @@ namespace Fclp.Internals.Parsing.OptionParsers
         {
             if (type.IsEnum)
             {
-                bool hasFlags = typeof(T).IsDefined(typeof(FlagsAttribute), false);
+                var hasFlags = typeof(T).IsDefined(typeof(FlagsAttribute), false);
 
-                Type enumParserType = hasFlags ?
+                var enumParserType = hasFlags ?
                     typeof(EnumFlagCommandLineOptionParser<T>) :
                     typeof(EnumCommandLineOptionParser<T>);
 
-                if (!this.Parsers.ContainsKey(enumParserType))
+                if (!Parsers.ContainsKey(enumParserType))
                 {
                     if (hasFlags)
                     {
-                        this.AddOrReplace(new EnumFlagCommandLineOptionParser<T>());
+                        AddOrReplace(new EnumFlagCommandLineOptionParser<T>());
                     }
                     else
                     {
-                        this.AddOrReplace(new EnumCommandLineOptionParser<T>());
+                        AddOrReplace(new EnumCommandLineOptionParser<T>());
                     }
 
                 }
@@ -144,9 +147,9 @@ namespace Fclp.Internals.Parsing.OptionParsers
                         var enumListParserType = typeof(ListCommandLineOptionParser<>).MakeGenericType(genericType);
                         var parser = (ICommandLineOptionParser<T>)Activator.CreateInstance(enumListParserType, this);
 
-                        if (!this.Parsers.ContainsKey(type))
+                        if (!Parsers.ContainsKey(type))
                         {
-                            this.AddOrReplace(parser);
+                            AddOrReplace(parser);
                         }
 
                         return true;
@@ -160,9 +163,9 @@ namespace Fclp.Internals.Parsing.OptionParsers
                 var nullableEnumParserType = typeof(NullableEnumCommandLineOptionParser<>).MakeGenericType(underlyingType);
                 var parser = (ICommandLineOptionParser<T>)Activator.CreateInstance(nullableEnumParserType, this);
 
-                if (!this.Parsers.ContainsKey(type))
+                if (!Parsers.ContainsKey(type))
                 {
-                    this.AddOrReplace(parser);
+                    AddOrReplace(parser);
                 }
 
                 return true;
@@ -173,7 +176,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
 
         private static bool IsNullableEnum(Type t)
         {
-            Type u = Nullable.GetUnderlyingType(t);
+            var u = Nullable.GetUnderlyingType(t);
             return (u != null) && u.IsEnum;
         }
 

@@ -27,36 +27,36 @@ using System.Collections.Generic;
 
 namespace Fclp.Internals.Validators
 {
-	/// <summary>
-	/// Wrapping validator that executes all the individual validation rules.
-	/// </summary>
-	public class CommandLineOptionValidator : ICommandLineOptionValidator
-	{
-		private readonly IList<ICommandLineOptionValidator> _rules;
+    /// <summary>
+    /// Wrapping validator that executes all the individual validation rules.
+    /// </summary>
+    public class CommandLineOptionValidator : ICommandLineOptionValidator
+    {
+        private readonly IList<ICommandLineOptionValidator> _rules;
 
-		/// <summary>
-		/// Initialises a new instance of the <see cref="CommandLineOptionValidator"/> class.
-		/// </summary>
+        /// <summary>
+        /// Initialises a new instance of the <see cref="CommandLineOptionValidator"/> class.
+        /// </summary>
         public CommandLineOptionValidator(ICommandLineOptionContainer container, SpecialCharacters specialCharacters)
-		{
-			_rules = new List<ICommandLineOptionValidator>
-			{
-				new OptionNameValidator(specialCharacters),
-				new NoDuplicateOptionValidator(container)
-			};
-		}
+        {
+            _rules = new List<ICommandLineOptionValidator>
+            {
+                new OptionNameValidator(specialCharacters),
+                new NoDuplicateOptionValidator(container)
+            };
+        }
 
-	    /// <summary>
-	    /// Validates the specified <see cref="ICommandLineOption"/> against all the registered rules.
-	    /// </summary>
-	    /// <param name="commandLineOption">The <see cref="ICommandLineOption"/> to validate.</param>
-	    /// <param name="stringComparison"></param>
-	    public void Validate(ICommandLineOption commandLineOption, StringComparison stringComparison)
-		{
-			foreach (var rule in _rules)
-			{
-				rule.Validate(commandLineOption, stringComparison);
-			}
-		}
-	}
+        /// <summary>
+        /// Validates the specified <see cref="ICommandLineOption"/> against all the registered rules.
+        /// </summary>
+        /// <param name="commandLineOption">The <see cref="ICommandLineOption"/> to validate.</param>
+        /// <param name="stringComparison"></param>
+        public void Validate(ICommandLineOption commandLineOption, StringComparison stringComparison)
+        {
+            foreach (var rule in _rules)
+            {
+                rule.Validate(commandLineOption, stringComparison);
+            }
+        }
+    }
 }

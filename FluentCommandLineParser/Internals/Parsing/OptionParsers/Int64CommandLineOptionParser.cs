@@ -12,10 +12,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// </summary>
         /// <param name="parsedOption"></param>
         /// <returns></returns>
-        public long Parse(ParsedOption parsedOption)
-        {
-            return long.Parse(parsedOption.Value, CultureInfo.CurrentCulture);
-        }
+        public long Parse(ParsedOption parsedOption) => long.Parse(parsedOption.Value, CultureInfo.CurrentCulture);
 
         /// <summary>
         /// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
@@ -24,8 +21,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
         public bool CanParse(ParsedOption parsedOption)
         {
-            long result;
-            return long.TryParse(parsedOption.Value, out result);
+            return long.TryParse(parsedOption.Value, out var result);
         }
     }
 }

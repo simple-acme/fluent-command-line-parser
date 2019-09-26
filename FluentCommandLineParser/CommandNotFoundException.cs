@@ -19,7 +19,7 @@ namespace Fclp
         /// </summary>
         /// <param name="commandName"></param>
         public CommandNotFoundException(string commandName) : base("Expected command " + commandName + " was not found in the parser.") { }
-		
+
         /// <summary>
         /// Initialises a new instance of the <see cref="CommandNotFoundException"/> class.
         /// </summary>
@@ -27,7 +27,7 @@ namespace Fclp
         /// <param name="context"></param>
         public CommandNotFoundException(SerializationInfo info, StreamingContext context)
             : base(info, context) { }
-		
+
         /// <summary>
         /// Initialises a new instance of the <see cref="CommandNotFoundException"/> class.
         /// </summary>

@@ -26,45 +26,42 @@ using System;
 
 namespace Fclp.Internals.Parsing.OptionParsers
 {
-	/// <summary>
-	/// Parser used to convert to <see cref="System.Boolean"/>.
-	/// </summary>
-	/// <remarks>For <see cref="System.Boolean"/> types the value is optional. If no value is provided for the Option then <c>true</c> is returned.</remarks>
-	public class UriCommandLineOptionParser : ICommandLineOptionParser<Uri>
-	{
-		/// <summary>
+    /// <summary>
+    /// Parser used to convert to <see cref="System.Boolean"/>.
+    /// </summary>
+    /// <remarks>For <see cref="System.Boolean"/> types the value is optional. If no value is provided for the Option then <c>true</c> is returned.</remarks>
+    public class UriCommandLineOptionParser : ICommandLineOptionParser<Uri>
+    {
+        /// <summary>
         /// Parses the specified <see cref="System.String"/> into a <see cref="System.Uri"/>.
-		/// </summary>
-		/// <param name="parsedOption"></param>
-		/// <returns>
+        /// </summary>
+        /// <param name="parsedOption"></param>
+        /// <returns>
         /// A <see cref="System.Uri"/> representing the parsed value.
-		/// The value is optional. If no value is provided then <c>true</c> is returned.
-		/// </returns>
-        public Uri Parse(ParsedOption parsedOption)
-		{
-		    return new Uri(parsedOption.Value);
-		}
+        /// The value is optional. If no value is provided then <c>true</c> is returned.
+        /// </returns>
+        public Uri Parse(ParsedOption parsedOption) => new Uri(parsedOption.Value);
 
-		/// <summary>
-		/// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
-		/// </summary>
-		/// <param name="parsedOption"></param>
-		/// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
-		public bool CanParse(ParsedOption parsedOption)
-		{
-		    try
-		    {
-		        new Uri(parsedOption.Value);
-		        return true;
-		    }
-		    catch (ArgumentNullException)
-		    {
+        /// <summary>
+        /// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
+        /// </summary>
+        /// <param name="parsedOption"></param>
+        /// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
+        public bool CanParse(ParsedOption parsedOption)
+        {
+            try
+            {
+                new Uri(parsedOption.Value);
+                return true;
+            }
+            catch (ArgumentNullException)
+            {
                 return false;
-		    }
-		    catch (UriFormatException)
-		    {
-		        return false;
-		    }
-		}
-	}
+            }
+            catch (UriFormatException)
+            {
+                return false;
+            }
+        }
+    }
 }

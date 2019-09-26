@@ -22,10 +22,10 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
+using Fclp.Internals;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Fclp.Internals;
 
 namespace Fclp
 {
@@ -35,34 +35,34 @@ namespace Fclp
     /// a predefined arguments object.
     /// </summary>
 	public interface IFluentCommandLineParser<TBuildType> where TBuildType : class
-	{
-		/// <summary>
-		/// Gets the constructed object.
-		/// </summary>
-		TBuildType Object { get; }
+    {
+        /// <summary>
+        /// Gets the constructed object.
+        /// </summary>
+        TBuildType Object { get; }
 
-		/// <summary>
-		/// Sets up an Option for a write-able property on the type being built.
-		/// </summary>
-		ICommandLineOptionBuilderFluent<TProperty> Setup<TProperty>(Expression<Func<TBuildType, TProperty>> propertyPicker);
+        /// <summary>
+        /// Sets up an Option for a write-able property on the type being built.
+        /// </summary>
+        ICommandLineOptionBuilderFluent<TProperty> Setup<TProperty>(Expression<Func<TBuildType, TProperty>> propertyPicker);
 
-		/// <summary>
-		/// Parses the specified <see><cref>T:System.String[]</cref></see> using the setup Options.
-		/// </summary>
-		/// <param name="args">The <see><cref>T:System.String[]</cref></see> to parse.</param>
-		/// <returns>An <see cref="ICommandLineParserResult"/> representing the results of the parse operation.</returns>
-		ICommandLineParserResult Parse(string[] args);
+        /// <summary>
+        /// Parses the specified <see><cref>T:System.String[]</cref></see> using the setup Options.
+        /// </summary>
+        /// <param name="args">The <see><cref>T:System.String[]</cref></see> to parse.</param>
+        /// <returns>An <see cref="ICommandLineParserResult"/> representing the results of the parse operation.</returns>
+        ICommandLineParserResult Parse(string[] args);
 
-		/// <summary>
-		/// Setup the help args.
-		/// </summary>
-		/// <param name="helpArgs">The help arguments to register.</param>
-		IHelpCommandLineOptionFluent SetupHelp(params string[] helpArgs);
+        /// <summary>
+        /// Setup the help args.
+        /// </summary>
+        /// <param name="helpArgs">The help arguments to register.</param>
+        IHelpCommandLineOptionFluent SetupHelp(params string[] helpArgs);
 
-		/// <summary>
-		/// Gets or sets whether values that differ by case are considered different. 
-		/// </summary>
-		bool IsCaseSensitive { get; set; }
+        /// <summary>
+        /// Gets or sets whether values that differ by case are considered different. 
+        /// </summary>
+        bool IsCaseSensitive { get; set; }
 
         /// <summary>
         /// Returns the Options that have been setup for this parser.
@@ -95,5 +95,5 @@ namespace Fclp
         /// </summary>
         /// <returns>this <see cref="IFluentCommandLineParser{TBuildType}"/></returns>
 	    IFluentCommandLineParser<TBuildType> SkipFirstArg();
-	}
+    }
 }

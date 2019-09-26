@@ -28,91 +28,100 @@ using System.Linq;
 
 namespace Fclp.Internals.Validators
 {
-	/// <summary>
-	/// Validator to ensure a new Option has a valid long name.
-	/// </summary>
-	public class OptionNameValidator : ICommandLineOptionValidator
-	{
-	    private readonly char[] _reservedChars;
+    /// <summary>
+    /// Validator to ensure a new Option has a valid long name.
+    /// </summary>
+    public class OptionNameValidator : ICommandLineOptionValidator
+    {
+        private readonly char[] _reservedChars;
 
         /// <summary>
         /// Initialises a new instance of <see cref="OptionNameValidator"/>.
         /// </summary>
         /// <param name="specialCharacters"></param>
-        public OptionNameValidator(SpecialCharacters specialCharacters)
-	    {
-	        _reservedChars = specialCharacters.ValueAssignments.Union(new[] { specialCharacters.Whitespace }).ToArray();
-        }
+        public OptionNameValidator(SpecialCharacters specialCharacters) => _reservedChars = specialCharacters.ValueAssignments.Union(new[] { specialCharacters.Whitespace }).ToArray();
 
-	    /// <summary>
-	    /// Verifies that the specified <see cref="ICommandLineOption"/> has a valid short/long name combination.
-	    /// </summary>
-	    /// <param name="commandLineOption">The <see cref="ICommandLineOption"/> to validate. This must not be null.</param>
-	    /// <param name="stringComparison"></param>
-	    /// <exception cref="ArgumentNullException">if <paramref name="commandLineOption"/> is null.</exception>
-	    public void Validate(ICommandLineOption commandLineOption, StringComparison stringComparison)
-		{
-			if (commandLineOption == null) throw new ArgumentNullException("commandLineOption");
+        /// <summary>
+        /// Verifies that the specified <see cref="ICommandLineOption"/> has a valid short/long name combination.
+        /// </summary>
+        /// <param name="commandLineOption">The <see cref="ICommandLineOption"/> to validate. This must not be null.</param>
+        /// <param name="stringComparison"></param>
+        /// <exception cref="ArgumentNullException">if <paramref name="commandLineOption"/> is null.</exception>
+        public void Validate(ICommandLineOption commandLineOption, StringComparison stringComparison)
+        {
+            if (commandLineOption == null)
+            {
+                throw new ArgumentNullException("commandLineOption");
+            }
 
             ValidateShortName(commandLineOption.ShortName);
-			ValidateLongName(commandLineOption.LongName);
-			ValidateShortAndLongName(commandLineOption.ShortName, commandLineOption.LongName);
-		}
+            ValidateLongName(commandLineOption.LongName);
+            ValidateShortAndLongName(commandLineOption.ShortName, commandLineOption.LongName);
+        }
 
-		private void ValidateShortAndLongName(string shortName, string longName)
-		{
-			if (string.IsNullOrEmpty(shortName) && string.IsNullOrEmpty(longName))
-			{
-				ThrowInvalid(string.Empty, "A short or long name must be provided.");
-			}
-		}
+        private void ValidateShortAndLongName(string shortName, string longName)
+        {
+            if (string.IsNullOrEmpty(shortName) && string.IsNullOrEmpty(longName))
+            {
+                ThrowInvalid(string.Empty, "A short or long name must be provided.");
+            }
+        }
 
-		private void ValidateLongName(string longName)
-		{
-			if (string.IsNullOrEmpty(longName)) return;
+        private void ValidateLongName(string longName)
+        {
+            if (string.IsNullOrEmpty(longName))
+            {
+                return;
+            }
 
-			VerifyDoesNotContainsReservedChar(longName);
+            VerifyDoesNotContainsReservedChar(longName);
 
-			if (longName.Length == 1)
-			{
-				ThrowInvalid(longName, "Long names must be longer than a single character. Single characters are reserved for short options only.");
-			}
-		}
+            if (longName.Length == 1)
+            {
+                ThrowInvalid(longName, "Long names must be longer than a single character. Single characters are reserved for short options only.");
+            }
+        }
 
-		private void ValidateShortName(string shortName)
-		{
-			if (string.IsNullOrEmpty(shortName)) return;
+        private void ValidateShortName(string shortName)
+        {
+            if (string.IsNullOrEmpty(shortName))
+            {
+                return;
+            }
 
-			if (shortName.Length > 1)
-			{
-				ThrowInvalid(shortName, "Short names must be a single character only.");
-			}
+            if (shortName.Length > 1)
+            {
+                ThrowInvalid(shortName, "Short names must be a single character only.");
+            }
 
-			VerifyDoesNotContainsReservedChar(shortName);
+            VerifyDoesNotContainsReservedChar(shortName);
 
-			if (char.IsControl(shortName, 0))
-			{
-				ThrowInvalid(shortName, "The character '" + shortName + "' is not valid for a short name.");
-			}
-		}
+            if (char.IsControl(shortName, 0))
+            {
+                ThrowInvalid(shortName, "The character '" + shortName + "' is not valid for a short name.");
+            }
+        }
 
-		private void VerifyDoesNotContainsReservedChar(string value)
-		{
-			if (string.IsNullOrEmpty(value)) return;
+        private void VerifyDoesNotContainsReservedChar(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
 
-			foreach (char reservedChar in _reservedChars)
-			{
-				if (value.Contains(reservedChar))
-				{
-					ThrowInvalid(value, "The character '" + reservedChar + "' is not valid within a short or long name.");
-				}
-			}
-		}
+            foreach (var reservedChar in _reservedChars)
+            {
+                if (value.Contains(reservedChar))
+                {
+                    ThrowInvalid(value, "The character '" + reservedChar + "' is not valid within a short or long name.");
+                }
+            }
+        }
 
-		private static void ThrowInvalid(string value, string message)
-		{
-			throw new InvalidOptionNameException(
-				string.Format(CultureInfo.InvariantCulture, "Invalid option name '{0}'. {1}", value, message));
-		}
-	}
+        private static void ThrowInvalid(string value, string message)
+        {
+            throw new InvalidOptionNameException(
+                string.Format(CultureInfo.InvariantCulture, "Invalid option name '{0}'. {1}", value, message));
+        }
+    }
 }

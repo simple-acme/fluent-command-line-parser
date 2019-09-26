@@ -26,16 +26,16 @@ using System;
 
 namespace Fclp.Internals.Validators
 {
-	/// <summary>
-	/// Represents a validator used to verify new setup command line options.
-	/// </summary>
-	public interface ICommandLineOptionValidator
-	{
-	    /// <summary>
-	    /// Verifies that the proposed new <see cref="ICommandLineOption"/> is a valid new Option.
-	    /// </summary>
-	    /// <param name="commandLineOption">The <see cref="ICommandLineOption"/> to validate. This must not be null.</param>
-	    /// <param name="stringComparison"></param>
-	    void Validate(ICommandLineOption commandLineOption, StringComparison stringComparison);
-	}
+    /// <summary>
+    /// Represents a validator used to verify new setup command line options.
+    /// </summary>
+    public interface ICommandLineOptionValidator
+    {
+        /// <summary>
+        /// Verifies that the proposed new <see cref="ICommandLineOption"/> is a valid new Option.
+        /// </summary>
+        /// <param name="commandLineOption">The <see cref="ICommandLineOption"/> to validate. This must not be null.</param>
+        /// <param name="stringComparison"></param>
+        void Validate(ICommandLineOption commandLineOption, StringComparison stringComparison);
+    }
 }
