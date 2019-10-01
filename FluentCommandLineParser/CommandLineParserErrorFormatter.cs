@@ -64,14 +64,12 @@ namespace Fclp
         /// <returns>A <see cref="System.String"/> describing the specified error.</returns>
         public string Format(ICommandLineParserError parserError)
         {
-            var optionSyntaxParseError = parserError as OptionSyntaxParseError;
-            if (optionSyntaxParseError != null)
+            if (parserError is OptionSyntaxParseError optionSyntaxParseError)
             {
                 return FormatOptionSyntaxParseError(optionSyntaxParseError);
             }
 
-            var expectedOptionNotFoundError = parserError as ExpectedOptionNotFoundParseError;
-            if (expectedOptionNotFoundError != null)
+            if (parserError is ExpectedOptionNotFoundParseError expectedOptionNotFoundError)
             {
                 return FormatExpectedOptionNotFoundError(expectedOptionNotFoundError);
             }
