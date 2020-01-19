@@ -201,7 +201,7 @@ namespace Fclp.Internals.Parsing
         /// </summary>
         /// <param name="arg">The <see cref="System.String"/> to examine.</param>
         /// <returns><c>true</c> if <paramref name="arg"/> is a Option key; otherwise <c>false</c>.</returns>
-        private bool IsAKey(string arg) => arg != null && _specialCharacters.OptionPrefix.Any(arg.StartsWith);
+        private bool IsAKey(string arg) => arg != null && _specialCharacters.OptionPrefix.Any(arg.StartsWith) && !arg.ContainsWhitespace();
 
         private bool IsACmd(string arg) => arg != null && _specialCharacters.OptionPrefix.Any(arg.StartsWith) == false;
 
