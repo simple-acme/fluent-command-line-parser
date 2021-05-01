@@ -26,6 +26,7 @@ using Fclp.Internals;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Fclp
 {
@@ -93,6 +94,11 @@ namespace Fclp
         /// Sets up an Option for a write-able property on the type being built.
         /// </summary>
         public ICommandLineOptionBuilderFluent<TProperty> Setup<TProperty>(Expression<Func<TBuildType, TProperty>> propertyPicker) => new CommandLineOptionBuilderFluent<TBuildType, TProperty>(Parser, Object, propertyPicker);
+
+        /// <summary>
+        /// Sets up an Option for a write-able property on the type being built.
+        /// </summary>
+        public ICommandLineOptionBuilderFluent<TProperty> Setup<TProperty>(PropertyInfo property) => new CommandLineOptionBuilderFluent<TBuildType, TProperty>(Parser, Object, property);
 
         /// <summary>
         /// Parses the specified <see><cref>T:System.String[]</cref></see> using the setup Options.

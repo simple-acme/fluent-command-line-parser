@@ -82,6 +82,7 @@ namespace Fclp.Internals
         private readonly ICommandLineOptionSetupFactory _setupFactory;
         private readonly TBuildType _buildObject;
         private readonly Expression<Func<TBuildType, TProperty>> _propertyPicker;
+        private PropertyInfo _property;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandLineOptionBuilderFluent{TBuildType, TProperty}" /> class.
@@ -118,6 +119,21 @@ namespace Fclp.Internals
             _propertyPicker = propertyPicker;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandLineOptionBuilderFluent{TBuildType, TProperty}" /> class.
+        /// </summary>
+        /// <param name="setupFactory">The parser.</param>
+        /// <param name="buildObject">The build object.</param>
+        /// <param name="propertyPicker">The property picker.</param>
+        public CommandLineOptionBuilderFluent(
+            ICommandLineOptionSetupFactory setupFactory,
+            TBuildType buildObject,
+            PropertyInfo property)
+        {
+            _setupFactory = setupFactory;
+            _buildObject = buildObject;
+            _property = property;
+        }
 
 
         /// <summary>
@@ -174,8 +190,11 @@ namespace Fclp.Internals
 
         private void AssignValueToPropertyCallback(TProperty value)
         {
-            var prop = (PropertyInfo)((MemberExpression)_propertyPicker.Body).Member;
-            prop.SetValue(_buildObject, value, null);
+            if (_property == null)
+            {
+                _property = (PropertyInfo)((MemberExpression)_propertyPicker.Body).Member;
+            }
+            _property.SetValue(_buildObject, value, null);
         }
     }
 }
