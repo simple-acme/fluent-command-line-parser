@@ -142,7 +142,7 @@ namespace Fclp
         /// <returns></returns>
         public IFluentCommandLineParser<TBuildType> MakeCaseInsensitive()
         {
-            Parser.MakeCaseInsensitive();
+            _ = Parser.MakeCaseInsensitive();
             return this;
         }
 
@@ -153,7 +153,7 @@ namespace Fclp
         /// <returns></returns>
         public IFluentCommandLineParser<TBuildType> DisableShortOptions()
         {
-            Parser.DisableShortOptions();
+            _ = Parser.DisableShortOptions();
             return this;
         }
 
@@ -164,7 +164,7 @@ namespace Fclp
         /// <returns></returns>
         public IFluentCommandLineParser<TBuildType> UseOwnOptionPrefix(params string[] prefix)
         {
-            Parser.UseOwnOptionPrefix(prefix);
+            _ = Parser.UseOwnOptionPrefix(prefix);
             return this;
         }
 
@@ -175,7 +175,7 @@ namespace Fclp
         /// <returns>this <see cref="IFluentCommandLineParser{TBuildType}"/></returns>
         public IFluentCommandLineParser<TBuildType> SkipFirstArg()
         {
-            Parser.SkipFirstArg();
+            _ = Parser.SkipFirstArg();
             return this;
         }
     }
