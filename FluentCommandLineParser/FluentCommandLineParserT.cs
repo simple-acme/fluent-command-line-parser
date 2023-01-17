@@ -25,6 +25,7 @@
 using Fclp.Internals;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -36,7 +37,7 @@ namespace Fclp
     /// a predefined arguments object.
     /// </summary>
 	/// <typeparam name="TBuildType">The object type containing the argument properties to populate from parsed command line arguments.</typeparam>
-	public class FluentCommandLineParser<TBuildType> : IFluentCommandLineParser<TBuildType> where TBuildType : class
+	public class FluentCommandLineParser<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TBuildType> : IFluentCommandLineParser<TBuildType> where TBuildType : class
     {
         /// <summary>
         /// Gets the <see cref="IFluentCommandLineParser"/>.
