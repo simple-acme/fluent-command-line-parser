@@ -145,9 +145,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
                 {
                     if (genericType.IsEnum || IsNullableEnum(genericType))
                     {
-#pragma warning disable IL2075 // 'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The return value of the source method does not have matching annotations.
                         var enumListParserType = typeof(ListCommandLineOptionParser<>).MakeGenericType(genericType);
-#pragma warning restore IL2075 // 'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The return value of the source method does not have matching annotations.
                         var parser = (ICommandLineOptionParser<T>)Activator.CreateInstance(enumListParserType, this);
 
                         if (!Parsers.ContainsKey(type))
@@ -163,9 +161,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
             if (IsNullableEnum(type))
             {
                 var underlyingType = Nullable.GetUnderlyingType(type);
-#pragma warning disable IL2070 // 'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The parameter of method does not have matching annotations.
                 var nullableEnumParserType = typeof(NullableEnumCommandLineOptionParser<>).MakeGenericType(underlyingType);
-#pragma warning restore IL2070 // 'this' argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The parameter of method does not have matching annotations.
                 var parser = (ICommandLineOptionParser<T>)Activator.CreateInstance(nullableEnumParserType, this);
 
                 if (!Parsers.ContainsKey(type))
