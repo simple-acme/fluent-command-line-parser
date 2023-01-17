@@ -94,12 +94,12 @@ namespace Fclp
         /// <summary>
         /// Sets up an Option for a write-able property on the type being built.
         /// </summary>
-        public ICommandLineOptionBuilderFluent<TProperty> Setup<TProperty>(Expression<Func<TBuildType, TProperty>> propertyPicker) => new CommandLineOptionBuilderFluent<TBuildType, TProperty>(Parser, Object, propertyPicker);
+        public ICommandLineOptionBuilderFluent<TProperty> Setup<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicProperties)] TProperty>(Expression<Func<TBuildType, TProperty>> propertyPicker) => new CommandLineOptionBuilderFluent<TBuildType, TProperty>(Parser, Object, propertyPicker);
 
         /// <summary>
         /// Sets up an Option for a write-able property on the type being built.
         /// </summary>
-        public ICommandLineOptionBuilderFluent<TProperty> Setup<TProperty>(PropertyInfo property) => new CommandLineOptionBuilderFluent<TBuildType, TProperty>(Parser, Object, property);
+        public ICommandLineOptionBuilderFluent<TProperty> Setup<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicProperties)] TProperty>(PropertyInfo property) => new CommandLineOptionBuilderFluent<TBuildType, TProperty>(Parser, Object, property);
 
         /// <summary>
         /// Parses the specified <see><cref>T:System.String[]</cref></see> using the setup Options.
