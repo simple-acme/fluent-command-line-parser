@@ -76,7 +76,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         {
             if (parser == null)
             {
-                throw new ArgumentNullException("parser");
+                throw new ArgumentNullException(nameof(parser));
             }
 
             var parserType = typeof(T);
