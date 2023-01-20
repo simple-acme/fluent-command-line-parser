@@ -136,63 +136,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
                 }
                 return true;
             }
-
-            if (type.IsGenericType)
-            {
-                var genericType = TryGetListGenericType(type);
-
-                if (genericType != null)
-                {
-                    if (genericType.IsEnum || IsNullableEnum(genericType))
-                    {
-                        var enumListParserType = typeof(ListCommandLineOptionParser<>).MakeGenericType(genericType);
-                        var parser = (ICommandLineOptionParser<T>)Activator.CreateInstance(enumListParserType, this);
-
-                        if (!Parsers.ContainsKey(type))
-                        {
-                            AddOrReplace(parser);
-                        }
-
-                        return true;
-                    }
-                }
-            }
-
-            if (IsNullableEnum(type))
-            {
-                var underlyingType = Nullable.GetUnderlyingType(type);
-                var nullableEnumParserType = typeof(NullableEnumCommandLineOptionParser<>).MakeGenericType(underlyingType);
-                var parser = (ICommandLineOptionParser<T>)Activator.CreateInstance(nullableEnumParserType, this);
-
-                if (!Parsers.ContainsKey(type))
-                {
-                    AddOrReplace(parser);
-                }
-
-                return true;
-            }
-
             return false;
-        }
-
-        private static bool IsNullableEnum(Type t)
-        {
-            var u = Nullable.GetUnderlyingType(t);
-            return (u != null) && u.IsEnum;
-        }
-
-        /// <summary>
-        /// Attemps to get the type of generic from a generic list.
-        /// </summary>
-        private static Type TryGetListGenericType(Type type)
-        {
-            if (type.IsGenericType && type.GetGenericTypeDefinition()
-                == typeof(List<>))
-            {
-                return type.GetGenericArguments()[0];
-            }
-
-            return null;
         }
     }
 }
