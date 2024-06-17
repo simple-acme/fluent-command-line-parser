@@ -90,7 +90,7 @@ namespace Fclp.Internals
         {
             if (options == null)
             {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(options));
             }
 
             var list = options.ToList();

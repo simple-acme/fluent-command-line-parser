@@ -66,7 +66,7 @@ namespace Fclp.Internals
         /// </summary>
         public ICommandLineOptionFormatter OptionFormatter
         {
-            get => _optionFormatter ?? (_optionFormatter = new CommandLineOptionFormatter { Header = Header });
+            get => _optionFormatter ??= new CommandLineOptionFormatter { Header = Header };
             set => _optionFormatter = value;
         }
 
@@ -162,10 +162,7 @@ namespace Fclp.Internals
                 ReturnCallback(formattedOutput);
             }
 
-            if (ReturnCallbackWithoutParser != null)
-            {
-                ReturnCallbackWithoutParser();
-            }
+            ReturnCallbackWithoutParser?.Invoke();
         }
     }
 }

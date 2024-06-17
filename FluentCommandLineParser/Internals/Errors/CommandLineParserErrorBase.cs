@@ -38,12 +38,7 @@ namespace Fclp.Internals.Errors
         /// <exception cref="ArgumentNullException">If <paramref name="cmdOption"/> is <c>null</c>.</exception>
         protected CommandLineParserErrorBase(ICommandLineOption cmdOption)
         {
-            if (cmdOption == null)
-            {
-                throw new ArgumentNullException("cmdOption");
-            }
-
-            Option = cmdOption;
+            Option = cmdOption ?? throw new ArgumentNullException(nameof(cmdOption));
         }
 
         /// <summary>

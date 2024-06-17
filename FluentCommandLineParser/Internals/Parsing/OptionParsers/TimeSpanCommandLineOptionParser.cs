@@ -45,7 +45,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// <returns><c>true</c> if the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>; otherwise <c>false</c>.</returns>
         public bool CanParse(ParsedOption parsedOption)
         {
-            return TimeSpan.TryParse(TrimAnyUnwantedCharacters(parsedOption.Value), out var dtOut);
+            return TimeSpan.TryParse(TrimAnyUnwantedCharacters(parsedOption.Value), out _);
         }
 
         /// <summary>

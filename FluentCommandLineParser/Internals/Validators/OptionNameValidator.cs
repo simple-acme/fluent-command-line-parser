@@ -51,7 +51,7 @@ namespace Fclp.Internals.Validators
         {
             if (commandLineOption == null)
             {
-                throw new ArgumentNullException("commandLineOption");
+                throw new ArgumentNullException(nameof(commandLineOption));
             }
 
             ValidateShortName(commandLineOption.ShortName);
@@ -59,7 +59,7 @@ namespace Fclp.Internals.Validators
             ValidateShortAndLongName(commandLineOption.ShortName, commandLineOption.LongName);
         }
 
-        private void ValidateShortAndLongName(string shortName, string longName)
+        private static void ValidateShortAndLongName(string shortName, string longName)
         {
             if (string.IsNullOrEmpty(shortName) && string.IsNullOrEmpty(longName))
             {

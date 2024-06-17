@@ -35,8 +35,8 @@ namespace Fclp.Internals.Parsing
     public class CommandLineParserEngineMark2 : ICommandLineParserEngine
     {
         private readonly SpecialCharacters _specialCharacters;
-        private readonly List<string> _additionalArgumentsFound = new List<string>();
-        private readonly List<ParsedOption> _parsedOptions = new List<ParsedOption>();
+        private readonly List<string> _additionalArgumentsFound = new();
+        private readonly List<ParsedOption> _parsedOptions = new();
         private readonly OptionArgumentParser _optionArgumentParser;
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Fclp.Internals.Parsing
         /// <returns>An <see cref="ICommandLineParserResult"/> representing the results of the parse operation.</returns>
         public ParserEngineResult Parse(string[] args, bool parseCommands)
         {
-            args = args ?? new string[0];
+            args ??= Array.Empty<string>();
 
             var grouper = new CommandLineOptionGrouper(_specialCharacters);
 

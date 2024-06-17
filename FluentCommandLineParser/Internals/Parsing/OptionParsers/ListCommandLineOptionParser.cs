@@ -83,7 +83,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
                 var clone = parsedOption.Clone();
                 clone.Value = value;
                 clone.Values = new[] { value };
-                clone.AdditionalValues = new string[0];
+                clone.AdditionalValues = System.Array.Empty<string>();
                 return parser.CanParse(clone);
             });
         }

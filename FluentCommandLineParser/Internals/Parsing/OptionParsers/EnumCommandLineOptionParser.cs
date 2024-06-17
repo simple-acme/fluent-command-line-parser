@@ -96,7 +96,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         {
             return int.TryParse(value, out var asInt)
                 ? IsDefined(asInt)
-                : _insensitiveNames.Keys.Contains(value.ToLowerInvariant());
+                : _insensitiveNames.ContainsKey(value.ToLowerInvariant());
         }
 
         /// <summary>
@@ -104,6 +104,6 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// </summary>
         /// <param name="value">The <see cref="System.Int32"/> that represents a {TEnum} value.</param>
         /// <returns>true if <paramref name="value"/> represents a {TEnum} value; otherwise false.</returns>
-        private bool IsDefined(int value) => _values.Keys.Contains(value);
+        private bool IsDefined(int value) => _values.ContainsKey(value);
     }
 }

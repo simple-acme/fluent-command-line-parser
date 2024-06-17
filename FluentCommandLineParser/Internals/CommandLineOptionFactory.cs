@@ -42,7 +42,7 @@ namespace Fclp.Internals
         /// <remarks>If <c>null</c> a new instance of the <see cref="ParserFactory"/> will be returned.</remarks>
         public ICommandLineOptionParserFactory ParserFactory
         {
-            get => _parserFactory ?? (_parserFactory = new CommandLineOptionParserFactory());
+            get => _parserFactory ??= new CommandLineOptionParserFactory();
             set => _parserFactory = value;
         }
 

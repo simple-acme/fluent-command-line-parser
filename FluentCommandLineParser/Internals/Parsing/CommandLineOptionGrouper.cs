@@ -58,7 +58,7 @@ namespace Fclp.Internals.Parsing
         {
             if (args.IsNullOrEmpty())
             {
-                return new string[0][];
+                return Array.Empty<string[]>();
             }
 
             _parseCommands = parseCommands;

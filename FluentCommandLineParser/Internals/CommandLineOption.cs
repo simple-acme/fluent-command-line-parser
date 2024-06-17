@@ -49,14 +49,9 @@ namespace Fclp.Internals
         /// <exception cref="ArgumentNullException">If <paramref name="parser"/> is <c>null</c>.</exception>
         public CommandLineOption(string shortName, string longName, ICommandLineOptionParser<T> parser)
         {
-            if (parser == null)
-            {
-                throw new ArgumentNullException("parser");
-            }
-
             ShortName = shortName;
             LongName = longName;
-            Parser = parser;
+            Parser = parser ?? throw new ArgumentNullException(nameof(parser));
         }
 
         #endregion

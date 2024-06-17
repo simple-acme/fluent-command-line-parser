@@ -133,12 +133,12 @@ namespace Fclp
         /// <summary>
         /// Gets the list of Options
         /// </summary>
-        public List<ICommandLineOption> Options => _options ?? (_options = new List<ICommandLineOption>());
+        public List<ICommandLineOption> Options => _options ??= new List<ICommandLineOption>();
 
         /// <summary>
         /// Gets the list of Commands
         /// </summary>
-        public List<ICommandLineCommand> Commands => _commands ?? (_commands = new List<ICommandLineCommand>());
+        public List<ICommandLineCommand> Commands => _commands ??= new List<ICommandLineCommand>();
 
         /// <summary>
         /// options/callback Execute sequence, default as the setup sequence
@@ -150,7 +150,7 @@ namespace Fclp
         /// </summary>
         public ICommandLineOptionFormatter OptionFormatter
         {
-            get => _optionFormatter ?? (_optionFormatter = new CommandLineOptionFormatter());
+            get => _optionFormatter ??= new CommandLineOptionFormatter();
             set => _optionFormatter = value;
         }
 
@@ -159,7 +159,7 @@ namespace Fclp
         /// </summary>
         public ICommandLineParserErrorFormatter ErrorFormatter
         {
-            get => _errorFormatter ?? (_errorFormatter = new CommandLineParserErrorFormatter());
+            get => _errorFormatter ??= new CommandLineParserErrorFormatter();
             set => _errorFormatter = value;
         }
 
@@ -169,7 +169,7 @@ namespace Fclp
         /// <remarks>If this property is set to <c>null</c> then the default <see cref="OptionFactory"/> is returned.</remarks>
         public ICommandLineOptionFactory OptionFactory
         {
-            get => _optionFactory ?? (_optionFactory = new CommandLineOptionFactory());
+            get => _optionFactory ??= new CommandLineOptionFactory();
             set => _optionFactory = value;
         }
 
@@ -178,7 +178,7 @@ namespace Fclp
         /// </summary>
         public ICommandLineOptionValidator OptionValidator
         {
-            get => _optionValidator ?? (_optionValidator = new CommandLineOptionValidator(this, SpecialCharacters));
+            get => _optionValidator ??= new CommandLineOptionValidator(this, SpecialCharacters);
             set => _optionValidator = value;
         }
 
@@ -187,7 +187,7 @@ namespace Fclp
         /// </summary>
         public ICommandLineParserEngine ParserEngine
         {
-            get => _parserEngine ?? (_parserEngine = new CommandLineParserEngineMark2(SpecialCharacters));
+            get => _parserEngine ??= new CommandLineParserEngineMark2(SpecialCharacters);
             set => _parserEngine = value;
         }
 
@@ -196,7 +196,7 @@ namespace Fclp
         /// </summary>
         public IHelpCommandLineOption HelpOption
         {
-            get => _helpOption ?? (_helpOption = new EmptyHelpCommandLineOption());
+            get => _helpOption ??= new EmptyHelpCommandLineOption();
             set => _helpOption = value;
         }
 
@@ -208,7 +208,7 @@ namespace Fclp
         /// <summary>
         /// Gets the special characters used by the parser.
         /// </summary>
-        public SpecialCharacters SpecialCharacters => _specialCharacters ?? (_specialCharacters = new SpecialCharacters());
+        public SpecialCharacters SpecialCharacters => _specialCharacters ??= new SpecialCharacters();
 
         /// <summary>
         /// Setup a new <see cref="ICommandLineOptionFluent{T}"/> using the specified short and long Option name.
@@ -224,13 +224,7 @@ namespace Fclp
 
         private ICommandLineOptionFluent<T> SetupInternal<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicProperties)] T>(string shortOption, string longOption)
         {
-            var argOption = OptionFactory.CreateOption<T>(shortOption, longOption);
-
-            if (argOption == null)
-            {
-                throw new InvalidOperationException("OptionFactory is producing unexpected results.");
-            }
-
+            var argOption = OptionFactory.CreateOption<T>(shortOption, longOption) ?? throw new InvalidOperationException("OptionFactory is producing unexpected results.");
             OptionValidator.Validate(argOption, IsCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase);
 
             Options.Add(argOption);

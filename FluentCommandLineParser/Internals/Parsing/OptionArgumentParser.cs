@@ -67,22 +67,17 @@ namespace Fclp.Internals.Parsing
             if (otherArguments.Any())
             {
                 allArguments.AddRange(otherArguments);
-                if (otherArguments.Count() > 1)
+                if (otherArguments.Count > 1)
                 {
                     additionalArguments.AddRange(otherArguments);
                     additionalArguments.RemoveAt(0);
                 }
             }
-            if (allArguments.Count > 1 &&
+            option.Value = allArguments.Count > 1 &&
                 allArguments.First().StartsWith("\"") &&
-                allArguments.Last().EndsWith("\""))
-            {
-                option.Value = string.Join(" ", allArguments.ToArray());
-            }
-            else
-            {
-                option.Value = allArguments.FirstOrDefault();
-            }
+                allArguments.Last().EndsWith("\"")
+                ? string.Join(" ", allArguments.ToArray())
+                : allArguments.FirstOrDefault();
             option.Value = string.Join(" ", allArguments.ToArray());
             option.Values = allArguments.ToArray();
             option.AdditionalValues = additionalArguments.ToArray();

@@ -63,7 +63,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
                 return parsedOption.HasSuffix == false || parsedOption.Suffix != "-";
             }
 
-            TryParse(parsedOption, out var result);
+            _ = TryParse(parsedOption, out var result);
             return result;
         }
 
@@ -76,10 +76,10 @@ namespace Fclp.Internals.Parsing.OptionParsers
         {
             // if the key exists with no value then this translates as true.
             // if the key exists but has a value then we must try to parse the value
-            return TryParse(parsedOption, out var result);
+            return TryParse(parsedOption, out _);
         }
 
-        private bool TryParse(ParsedOption parsedOption, out bool result)
+        private static bool TryParse(ParsedOption parsedOption, out bool result)
         {
             if (parsedOption.Value.IsNullOrWhiteSpace())
             {

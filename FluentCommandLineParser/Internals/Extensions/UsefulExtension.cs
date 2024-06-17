@@ -68,7 +68,7 @@ namespace Fclp.Internals.Extensions
         /// </summary>
         /// <param name="value">The <see cref="System.String"/> to examine.</param>
         /// <returns><c>true</c> if <paramref name="value"/> contains at least one whitespace char; otherwise <c>false</c>.</returns>
-        public static bool ContainsWhitespace(this string value) => string.IsNullOrEmpty(value) == false && value.Contains(" ");
+        public static bool ContainsWhitespace(this string value) => string.IsNullOrEmpty(value) == false && value.Contains(' ');
 
         /// <summary>
         /// Wraps the specified <see cref="System.String"/> in double quotes.
@@ -86,7 +86,7 @@ namespace Fclp.Internals.Extensions
             }
             if (str.StartsWith("\"") && str.EndsWith("\""))
             {
-                str = str.Substring(1, str.Length - 2);
+                str = str[1..^1];
             }
             return str;
         }
@@ -139,7 +139,7 @@ namespace Fclp.Internals.Extensions
                 }
             }
 
-            return (new string(parmChars)).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            return new string(parmChars).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         /// <summary>

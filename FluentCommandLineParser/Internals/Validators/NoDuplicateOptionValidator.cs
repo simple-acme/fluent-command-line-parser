@@ -51,12 +51,7 @@ namespace Fclp.Internals.Validators
         /// <param name="container">The <see cref="IFluentCommandLineParser"/> containing the setup options. This must not be null.</param>
         public NoDuplicateOptionValidator(ICommandLineOptionContainer container)
         {
-            if (container == null)
-            {
-                throw new ArgumentNullException("container");
-            }
-
-            _container = container;
+            _container = container ?? throw new ArgumentNullException(nameof(container));
         }
 
         ///// <summary>
@@ -107,7 +102,7 @@ namespace Fclp.Internals.Validators
             }
         }
 
-        private void ValuesAreEqual(string value, string otherValue, StringComparison stringComparison)
+        private static void ValuesAreEqual(string value, string otherValue, StringComparison stringComparison)
         {
             if (string.Equals(value, otherValue, stringComparison))
             {
@@ -115,7 +110,7 @@ namespace Fclp.Internals.Validators
             }
         }
 
-        private bool CommandsAreEqual(ICommandLineCommand command, ICommandLineCommand otherCommand, StringComparison stringComparison)
+        private static bool CommandsAreEqual(ICommandLineCommand command, ICommandLineCommand otherCommand, StringComparison stringComparison)
         {
             if (command == null && otherCommand == null)
             {

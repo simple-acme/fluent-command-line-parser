@@ -43,7 +43,7 @@ namespace Fclp
         /// <summary>
         /// Gets the list of Options setup for this command.
         /// </summary>
-        public IEnumerable<ICommandLineOption> Options => _options ?? (_options = new List<ICommandLineOption>());
+        public IEnumerable<ICommandLineOption> Options => _options ??= new List<ICommandLineOption>();
 
         /// <summary>
         /// Gets whether the command has a callback
@@ -66,7 +66,7 @@ namespace Fclp
         /// </summary>
         public ICommandLineOptionValidator OptionValidator
         {
-            get => _optionValidator ?? (_optionValidator = new CommandLineOptionValidator(this, Parser.SpecialCharacters));
+            get => _optionValidator ??= new CommandLineOptionValidator(this, Parser.SpecialCharacters);
             set => _optionValidator = value;
         }
 
@@ -76,7 +76,7 @@ namespace Fclp
         /// <remarks>If this property is set to <c>null</c> then the default <see cref="OptionFactory"/> is returned.</remarks>
         public ICommandLineOptionFactory OptionFactory
         {
-            get => _optionFactory ?? (_optionFactory = new CommandLineOptionFactory());
+            get => _optionFactory ??= new CommandLineOptionFactory();
             set => _optionFactory = value;
         }
 
@@ -96,13 +96,7 @@ namespace Fclp
 
         private ICommandLineOptionFluent<T> SetupInternal<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>(string shortOption, string longOption)
         {
-            var argOption = OptionFactory.CreateOption<T>(shortOption, longOption);
-
-            if (argOption == null)
-            {
-                throw new InvalidOperationException("OptionFactory is producing unexpected results.");
-            }
-
+            var argOption = OptionFactory.CreateOption<T>(shortOption, longOption) ?? throw new InvalidOperationException("OptionFactory is producing unexpected results.");
             OptionValidator.Validate(argOption, Parser.IsCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase);
 
             _options.Add(argOption);

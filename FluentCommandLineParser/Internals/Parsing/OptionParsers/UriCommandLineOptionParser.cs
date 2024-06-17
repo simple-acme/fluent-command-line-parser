@@ -40,7 +40,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// A <see cref="System.Uri"/> representing the parsed value.
         /// The value is optional. If no value is provided then <c>true</c> is returned.
         /// </returns>
-        public Uri Parse(ParsedOption parsedOption) => new Uri(parsedOption.Value);
+        public Uri Parse(ParsedOption parsedOption) => new(parsedOption.Value);
 
         /// <summary>
         /// Determines whether the specified <see cref="System.String"/> can be parsed by this <see cref="ICommandLineOptionParser{T}"/>.
@@ -51,7 +51,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         {
             try
             {
-                new Uri(parsedOption.Value);
+                _ = new Uri(parsedOption.Value);
                 return true;
             }
             catch (ArgumentNullException)
