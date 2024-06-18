@@ -23,14 +23,6 @@ namespace Fclp
         /// <summary>
         /// Initialises a new instance of the <see cref="OptionAlreadyExistsException"/> class.
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public CommandAlreadyExistsException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="OptionAlreadyExistsException"/> class.
-        /// </summary>
         /// <param name="commandName"></param>
         /// <param name="innerException"></param>
         public CommandAlreadyExistsException(string commandName, Exception innerException)

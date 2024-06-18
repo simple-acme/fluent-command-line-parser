@@ -47,14 +47,6 @@ namespace Fclp
         /// <summary>
         /// Initialises a new instance of the <see cref="OptionAlreadyExistsException"/> class.
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public OptionAlreadyExistsException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="OptionAlreadyExistsException"/> class.
-        /// </summary>
         /// <param name="optionName"></param>
         /// <param name="innerException"></param>
         public OptionAlreadyExistsException(string optionName, Exception innerException)

@@ -23,14 +23,6 @@ namespace Fclp
         /// <summary>
         /// Initialises a new instance of the <see cref="CommandNotFoundException"/> class.
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public CommandNotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="CommandNotFoundException"/> class.
-        /// </summary>
         /// <param name="optionName"></param>
         /// <param name="innerException"></param>
         public CommandNotFoundException(string optionName, Exception innerException)
