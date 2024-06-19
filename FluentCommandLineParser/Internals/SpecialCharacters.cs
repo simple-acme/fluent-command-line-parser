@@ -34,7 +34,7 @@ namespace Fclp.Internals
         /// <summary>
         /// Characters used for value assignment.
         /// </summary>
-        public char[] ValueAssignments { get; private set; } = new[] { '=', ':' };
+        public char[] ValueAssignments { get; private set; } = ['=', ':'];
 
         /// <summary>
         /// Assign a name to the whitespace character.
@@ -44,17 +44,17 @@ namespace Fclp.Internals
         /// <summary>
         /// Characters that define the start of an option.
         /// </summary>
-        public List<string> OptionPrefix { get; private set; } = new List<string> { "/", "--", "-" };
+        public List<string> OptionPrefix { get; private set; } = ["/", "--", "-"];
 
         /// <summary>
         /// Characters that have special meaning at the end of an option key.
         /// </summary>
-        public List<string> OptionSuffix { get; private set; } = new List<string> { "+", "-" };
+        public List<string> OptionSuffix { get; private set; } = ["+", "-"];
 
         /// <summary>s
         /// Characters that define an explicit short option.
         /// </summary>
-        public List<string> ShortOptionPrefix { get; private set; } = new List<string> { "-" };
+        public List<string> ShortOptionPrefix { get; private set; } = ["-"];
 
         /// <summary>
         /// The key that indicates the end of any options.

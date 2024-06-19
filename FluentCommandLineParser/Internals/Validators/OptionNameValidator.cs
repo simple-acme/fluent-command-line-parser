@@ -31,15 +31,13 @@ namespace Fclp.Internals.Validators
     /// <summary>
     /// Validator to ensure a new Option has a valid long name.
     /// </summary>
-    public class OptionNameValidator : ICommandLineOptionValidator
+    /// <remarks>
+    /// Initialises a new instance of <see cref="OptionNameValidator"/>.
+    /// </remarks>
+    /// <param name="specialCharacters"></param>
+    public class OptionNameValidator(SpecialCharacters specialCharacters) : ICommandLineOptionValidator
     {
-        private readonly char[] _reservedChars;
-
-        /// <summary>
-        /// Initialises a new instance of <see cref="OptionNameValidator"/>.
-        /// </summary>
-        /// <param name="specialCharacters"></param>
-        public OptionNameValidator(SpecialCharacters specialCharacters) => _reservedChars = specialCharacters.ValueAssignments.Union(new[] { specialCharacters.Whitespace }).ToArray();
+        private readonly char[] _reservedChars = specialCharacters.ValueAssignments.Union([specialCharacters.Whitespace]).ToArray();
 
         /// <summary>
         /// Verifies that the specified <see cref="ICommandLineOption"/> has a valid short/long name combination.
@@ -49,10 +47,7 @@ namespace Fclp.Internals.Validators
         /// <exception cref="ArgumentNullException">if <paramref name="commandLineOption"/> is null.</exception>
         public void Validate(ICommandLineOption commandLineOption, StringComparison stringComparison)
         {
-            if (commandLineOption == null)
-            {
-                throw new ArgumentNullException(nameof(commandLineOption));
-            }
+            ArgumentNullException.ThrowIfNull(commandLineOption);
 
             ValidateShortName(commandLineOption.ShortName);
             ValidateLongName(commandLineOption.LongName);

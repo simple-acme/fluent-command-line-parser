@@ -32,24 +32,17 @@ namespace Fclp.Internals.Parsing
     /// <summary>
     /// Organises arguments into group defined by their associated Option.
     /// </summary>
-    public class CommandLineOptionGrouper
+    /// <remarks>
+    /// Initialises a new instance of <see cref="CommandLineOptionGrouper"/>.
+    /// </remarks>
+    public class CommandLineOptionGrouper(SpecialCharacters specialCharacters)
     {
-        private readonly SpecialCharacters _specialCharacters;
         private string[] _args;
         private int _currentOptionLookupIndex;
         private int[] _foundOptionLookup;
         private int _currentOptionIndex;
-        private readonly List<string> _orphanArgs;
+        private readonly List<string> _orphanArgs = [];
         private bool _parseCommands = false;
-
-        /// <summary>
-        /// Initialises a new instance of <see cref="CommandLineOptionGrouper"/>.
-        /// </summary>
-	    public CommandLineOptionGrouper(SpecialCharacters specialCharacters)
-        {
-            _specialCharacters = specialCharacters;
-            _orphanArgs = new List<string>();
-        }
 
         /// <summary>
         /// Groups the specified arguments by the associated Option.
@@ -58,7 +51,7 @@ namespace Fclp.Internals.Parsing
         {
             if (args.IsNullOrEmpty())
             {
-                return Array.Empty<string[]>();
+                return [];
             }
 
             _parseCommands = parseCommands;
@@ -82,7 +75,7 @@ namespace Fclp.Internals.Parsing
                 {
                     if (ContainsAtLeastOneOption(args))
                     {
-                        options.Add(new[] { first });
+                        options.Add([first]);
 
                         FindOptionIndexes();
 
@@ -107,19 +100,19 @@ namespace Fclp.Internals.Parsing
                 }
             }
 
-            if (_orphanArgs.Any())
+            if (_orphanArgs.Count != 0)
             {
                 if (options.Count > 0)
                 {
-                    options.Insert(1, _orphanArgs.ToArray());
+                    options.Insert(1, [.. _orphanArgs]);
                 }
                 else
                 {
-                    options.Add(_orphanArgs.ToArray());
+                    options.Add([.. _orphanArgs]);
                 }
             }
 
-            return options.ToArray();
+            return [.. options];
         }
 
         private bool ContainsAtLeastOneOption(string[] args) => args.Any(IsAKey);
@@ -163,11 +156,11 @@ namespace Fclp.Internals.Parsing
                     {
                         _orphanArgs.Add(currentArg);
                     }
-                    if (!insideQuote && currentArg.StartsWith("\"") && !currentArg.EndsWith("\""))
+                    if (!insideQuote && currentArg.StartsWith('\"') && !currentArg.EndsWith('\"'))
                     {
                         insideQuote = true;
                     }
-                    else if (insideQuote && currentArg.EndsWith("\""))
+                    else if (insideQuote && currentArg.EndsWith('\"'))
                     {
                         insideQuote = false;
                     }
@@ -177,7 +170,7 @@ namespace Fclp.Internals.Parsing
                 indexes.Add(index);
             }
 
-            _foundOptionLookup = indexes.ToArray();
+            _foundOptionLookup = [.. indexes];
         }
 
         private bool MoveToNextOption()
@@ -201,13 +194,13 @@ namespace Fclp.Internals.Parsing
         /// </summary>
         /// <param name="arg">The <see cref="System.String"/> to examine.</param>
         /// <returns><c>true</c> if <paramref name="arg"/> is a Option key; otherwise <c>false</c>.</returns>
-        private bool IsAKey(string arg) => arg != null && _specialCharacters.OptionPrefix.Any(arg.StartsWith) && !arg.ContainsWhitespace();
+        private bool IsAKey(string arg) => arg != null && specialCharacters.OptionPrefix.Any(arg.StartsWith) && !arg.ContainsWhitespace();
 
-        private bool IsACmd(string arg) => arg != null && _specialCharacters.OptionPrefix.Any(arg.StartsWith) == false;
+        private bool IsACmd(string arg) => arg != null && specialCharacters.OptionPrefix.Any(arg.StartsWith) == false;
 
         /// <summary>
         /// Determines whether the specified string indicates the end of parsed options.
         /// </summary>
-        private bool IsEndOfOptionsKey(string arg) => string.Equals(arg, _specialCharacters.EndOfOptionsKey, StringComparison.InvariantCultureIgnoreCase);
+        private bool IsEndOfOptionsKey(string arg) => string.Equals(arg, specialCharacters.EndOfOptionsKey, StringComparison.InvariantCultureIgnoreCase);
     }
 }

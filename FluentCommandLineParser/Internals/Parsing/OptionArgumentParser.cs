@@ -32,15 +32,12 @@ namespace Fclp.Internals.Parsing
     /// <summary>
     /// 
     /// </summary>
-    public class OptionArgumentParser
+    /// <remarks>
+    /// Initialises a new instance of <see cref="OptionArgumentParser"/>.
+    /// </remarks>
+    /// <param name="specialCharacters"></param>
+    public class OptionArgumentParser(SpecialCharacters specialCharacters)
     {
-        private readonly SpecialCharacters _specialCharacters;
-
-        /// <summary>
-        /// Initialises a new instance of <see cref="OptionArgumentParser"/>.
-        /// </summary>
-        /// <param name="specialCharacters"></param>
-        public OptionArgumentParser(SpecialCharacters specialCharacters) => _specialCharacters = specialCharacters;
 
         /// <summary>
         /// Parses the values.
@@ -49,7 +46,7 @@ namespace Fclp.Internals.Parsing
         /// <param name="option">The option.</param>
         public void ParseArguments(IEnumerable<string> args, ParsedOption option)
         {
-            if (option.Key != null && _specialCharacters.ValueAssignments.Any(option.Key.Contains))
+            if (option.Key != null && specialCharacters.ValueAssignments.Any(option.Key.Contains))
             {
                 TryGetArgumentFromKey(option);
             }
@@ -64,7 +61,7 @@ namespace Fclp.Internals.Parsing
                 allArguments.Add(option.Value);
             }
 
-            if (otherArguments.Any())
+            if (otherArguments.Count != 0)
             {
                 allArguments.AddRange(otherArguments);
                 if (otherArguments.Count > 1)
@@ -74,18 +71,18 @@ namespace Fclp.Internals.Parsing
                 }
             }
             option.Value = allArguments.Count > 1 &&
-                allArguments.First().StartsWith("\"") &&
-                allArguments.Last().EndsWith("\"")
-                ? string.Join(" ", allArguments.ToArray())
+                allArguments.First().StartsWith('\"') &&
+                allArguments.Last().EndsWith('\"')
+                ? string.Join(" ", [.. allArguments])
                 : allArguments.FirstOrDefault();
-            option.Value = string.Join(" ", allArguments.ToArray());
-            option.Values = allArguments.ToArray();
-            option.AdditionalValues = additionalArguments.ToArray();
+            option.Value = string.Join(" ", [.. allArguments]);
+            option.Values = [.. allArguments];
+            option.AdditionalValues = [.. additionalArguments];
         }
 
         private void TryGetArgumentFromKey(ParsedOption option)
         {
-            var split = option.Key.Split(_specialCharacters.ValueAssignments, 2, StringSplitOptions.RemoveEmptyEntries);
+            var split = option.Key.Split(specialCharacters.ValueAssignments, 2, StringSplitOptions.RemoveEmptyEntries);
 
             option.Key = split[0];
             option.Value = split.Length > 1
@@ -103,6 +100,6 @@ namespace Fclp.Internals.Parsing
         /// <summary>
         /// Determines whether the specified string indicates the end of parsed options.
         /// </summary>
-        private bool IsEndOfOptionsKey(string arg) => string.Equals(arg, _specialCharacters.EndOfOptionsKey, StringComparison.InvariantCultureIgnoreCase);
+        private bool IsEndOfOptionsKey(string arg) => string.Equals(arg, specialCharacters.EndOfOptionsKey, StringComparison.InvariantCultureIgnoreCase);
     }
 }

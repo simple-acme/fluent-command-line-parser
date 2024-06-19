@@ -32,20 +32,18 @@ namespace Fclp.Internals
     /// <summary>
     /// Represents a command line option that determines whether to show the help text.
     /// </summary>
-    public class HelpCommandLineOption : IHelpCommandLineOptionResult
+    /// <remarks>
+    /// Initialises a new instance of <see cref="HelpCommandLineOption"/> class.
+    /// </remarks>
+    /// <param name="helpArgs">The registered help arguments.</param>
+    public class HelpCommandLineOption(IEnumerable<string> helpArgs) : IHelpCommandLineOptionResult
     {
         private ICommandLineOptionFormatter _optionFormatter;
 
         /// <summary>
-        /// Initialises a new instance of <see cref="HelpCommandLineOption"/> class.
-        /// </summary>
-        /// <param name="helpArgs">The registered help arguments.</param>
-        public HelpCommandLineOption(IEnumerable<string> helpArgs) => HelpArgs = helpArgs ?? new List<string>();
-
-        /// <summary>
         /// Gets the registered help arguments.
         /// </summary>
-        public IEnumerable<string> HelpArgs { get; private set; }
+        public IEnumerable<string> HelpArgs { get; private set; } = helpArgs ?? [];
 
         /// <summary>
         /// Gets or sets the callback method.
@@ -140,9 +138,9 @@ namespace Fclp.Internals
         /// </returns>
         public bool ShouldShowHelp(IEnumerable<ParsedOption> parsedOptions, StringComparison comparisonType)
         {
-            var parsed = parsedOptions != null ? parsedOptions.ToList() : new List<ParsedOption>();
+            var parsed = parsedOptions != null ? parsedOptions.ToList() : [];
 
-            if (parsed.Any() == false && ShouldUseForEmptyArgs)
+            if (parsed.Count == 0 && ShouldUseForEmptyArgs)
             {
                 return true;
             }

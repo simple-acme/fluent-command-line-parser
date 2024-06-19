@@ -30,38 +30,29 @@ namespace Fclp.Internals.Errors
     /// <summary>
     /// Represents a parse error that has occurred because the syntax was in an unexpected format.
     /// </summary>
-    public class OptionSyntaxParseError : CommandLineParserErrorBase
+    /// <remarks>
+    /// Initialises a new instance of the <see cref="CommandLineParserErrorBase"/> class.
+    /// </remarks>
+    /// <param name="cmdOption">The <see cref="ICommandLineOption"/> this error relates too. This must not be <c>null</c>.</param>
+    /// <param name="parsedOption">The parsed option that caused the error.</param>
+    /// <exception cref="ArgumentNullException">If <paramref name="cmdOption"/> is <c>null</c>.</exception>
+    public class OptionSyntaxParseError(ICommandLineOption cmdOption, ParsedOption parsedOption) : CommandLineParserErrorBase(cmdOption)
     {
         /// <summary>
         /// Gets the parsed option that caused the error.
         /// </summary>
-        public ParsedOption ParsedOption { get; private set; }
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="CommandLineParserErrorBase"/> class.
-        /// </summary>
-        /// <param name="cmdOption">The <see cref="ICommandLineOption"/> this error relates too. This must not be <c>null</c>.</param>
-        /// <param name="parsedOption">The parsed option that caused the error.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="cmdOption"/> is <c>null</c>.</exception>
-        public OptionSyntaxParseError(ICommandLineOption cmdOption, ParsedOption parsedOption) :
-            base(cmdOption) => ParsedOption = parsedOption;
+        public ParsedOption ParsedOption { get; private set; } = parsedOption;
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public class UnexpectedValueParseError : CommandLineParserErrorBase
+    /// <remarks>
+    /// Initialises a new instance of the <see cref="CommandLineParserErrorBase"/> class.
+    /// </remarks>
+    /// <param name="cmdOption">The <see cref="ICommandLineOption"/> this error relates too. This must not be <c>null</c>.</param>
+    /// <exception cref="ArgumentNullException">If <paramref name="cmdOption"/> is <c>null</c>.</exception>
+    public class UnexpectedValueParseError(ICommandLineOption cmdOption) : CommandLineParserErrorBase(cmdOption)
     {
-        /// <summary>
-        /// Initialises a new instance of the <see cref="CommandLineParserErrorBase"/> class.
-        /// </summary>
-        /// <param name="cmdOption">The <see cref="ICommandLineOption"/> this error relates too. This must not be <c>null</c>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="cmdOption"/> is <c>null</c>.</exception>
-        public UnexpectedValueParseError(ICommandLineOption cmdOption) :
-            base(cmdOption)
-        {
-        }
-
-
     }
 }

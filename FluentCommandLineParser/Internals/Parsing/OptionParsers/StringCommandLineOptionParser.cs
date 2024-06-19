@@ -67,7 +67,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
 
             var items = value.SplitOnWhitespace();
 
-            return items.Count() == 1 || (value.StartsWith("\"") && value.EndsWith("\""));
+            return items.Count() == 1 || (value.StartsWith('\"') && value.EndsWith('\"'));
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// </summary>
         public CommandLineOptionParserFactory()
         {
-            Parsers = new Dictionary<Type, object>();
+            Parsers = [];
             AddOrReplace(new BoolCommandLineOptionParser());
             AddOrReplace(new Int32CommandLineOptionParser());
             AddOrReplace(new Int64CommandLineOptionParser());
@@ -74,10 +74,7 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// <exception cref="ArgumentNullException">If <paramref name="parser"/> is <c>null</c>.</exception>
         public void AddOrReplace<T>(ICommandLineOptionParser<T> parser)
         {
-            if (parser == null)
-            {
-                throw new ArgumentNullException(nameof(parser));
-            }
+            ArgumentNullException.ThrowIfNull(parser);
 
             var parserType = typeof(T);
 

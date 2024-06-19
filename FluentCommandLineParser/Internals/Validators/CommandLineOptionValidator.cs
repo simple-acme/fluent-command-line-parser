@@ -30,21 +30,16 @@ namespace Fclp.Internals.Validators
     /// <summary>
     /// Wrapping validator that executes all the individual validation rules.
     /// </summary>
-    public class CommandLineOptionValidator : ICommandLineOptionValidator
+    /// <remarks>
+    /// Initialises a new instance of the <see cref="CommandLineOptionValidator"/> class.
+    /// </remarks>
+    public class CommandLineOptionValidator(ICommandLineOptionContainer container, SpecialCharacters specialCharacters) : ICommandLineOptionValidator
     {
-        private readonly IList<ICommandLineOptionValidator> _rules;
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="CommandLineOptionValidator"/> class.
-        /// </summary>
-        public CommandLineOptionValidator(ICommandLineOptionContainer container, SpecialCharacters specialCharacters)
-        {
-            _rules = new List<ICommandLineOptionValidator>
-            {
+        private readonly IList<ICommandLineOptionValidator> _rules =
+            [
                 new OptionNameValidator(specialCharacters),
                 new NoDuplicateOptionValidator(container)
-            };
-        }
+            ];
 
         /// <summary>
         /// Validates the specified <see cref="ICommandLineOption"/> against all the registered rules.

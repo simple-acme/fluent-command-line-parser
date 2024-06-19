@@ -8,27 +8,21 @@ using System.Linq.Expressions;
 
 namespace Fclp
 {
-    internal class CommandLineCommand<TBuildType> : ICommandLineOptionSetupFactory, ICommandLineCommandT<TBuildType>, ICommandLineCommandFluent<TBuildType> where TBuildType : new()
+    internal class CommandLineCommand<TBuildType>(IFluentCommandLineParser parser) : ICommandLineOptionSetupFactory, ICommandLineCommandT<TBuildType>, ICommandLineCommandFluent<TBuildType> where TBuildType : new()
     {
         private List<ICommandLineOption> _options;
         private ICommandLineOptionFactory _optionFactory;
         private ICommandLineOptionValidator _optionValidator;
 
-        public CommandLineCommand(IFluentCommandLineParser parser)
-        {
-            Parser = parser;
-            Object = new TBuildType();
-        }
-
         /// <summary>
         /// Gets the <see cref="IFluentCommandLineParser"/>.
         /// </summary>
-        public IFluentCommandLineParser Parser { get; set; }
+        public IFluentCommandLineParser Parser { get; set; } = parser;
 
         /// <summary>
         /// Gets the constructed object.
         /// </summary>
-        public TBuildType Object { get; private set; }
+        public TBuildType Object { get; private set; } = new TBuildType();
 
         /// <summary>
         /// The callback to execute with the results of this command if used.
@@ -43,7 +37,7 @@ namespace Fclp
         /// <summary>
         /// Gets the list of Options setup for this command.
         /// </summary>
-        public IEnumerable<ICommandLineOption> Options => _options ??= new List<ICommandLineOption>();
+        public IEnumerable<ICommandLineOption> Options => _options ??= [];
 
         /// <summary>
         /// Gets whether the command has a callback

@@ -133,12 +133,12 @@ namespace Fclp
         /// <summary>
         /// Gets the list of Options
         /// </summary>
-        public List<ICommandLineOption> Options => _options ??= new List<ICommandLineOption>();
+        public List<ICommandLineOption> Options => _options ??= [];
 
         /// <summary>
         /// Gets the list of Commands
         /// </summary>
-        public List<ICommandLineCommand> Commands => _commands ??= new List<ICommandLineCommand>();
+        public List<ICommandLineCommand> Commands => _commands ??= [];
 
         /// <summary>
         /// options/callback Execute sequence, default as the setup sequence
@@ -203,7 +203,7 @@ namespace Fclp
         /// <summary>
         /// Gets whether commands have been setup for this parser.
         /// </summary>
-	    public bool HasCommands => Commands.Any();
+	    public bool HasCommands => Commands.Count != 0;
 
         /// <summary>
         /// Gets the special characters used by the parser.
@@ -309,7 +309,7 @@ namespace Fclp
             return ParseOptions(Options, parsedOptions, result);
         }
 
-        private ICommandLineParserResult ParseOptions(IEnumerable<ICommandLineOption> options, List<ParsedOption> parsedOptions, CommandLineParserResult result)
+        private CommandLineParserResult ParseOptions(IEnumerable<ICommandLineOption> options, List<ParsedOption> parsedOptions, CommandLineParserResult result)
         {
             /*
             * Step 1. match the setup Option to one provided in the args by either long or short names

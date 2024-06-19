@@ -29,21 +29,17 @@ namespace Fclp.Internals.Errors
     /// <summary>
     /// Contains error information regarding a failed parsing of a Option.
     /// </summary>
-    public abstract class CommandLineParserErrorBase : ICommandLineParserError
+    /// <remarks>
+    /// Initialises a new instance of the <see cref="CommandLineParserErrorBase"/> class.
+    /// </remarks>
+    /// <param name="cmdOption">The <see cref="ICommandLineOption"/> this error relates too. This must not be <c>null</c>.</param>
+    /// <exception cref="ArgumentNullException">If <paramref name="cmdOption"/> is <c>null</c>.</exception>
+    public abstract class CommandLineParserErrorBase(ICommandLineOption cmdOption) : ICommandLineParserError
     {
-        /// <summary>
-        /// Initialises a new instance of the <see cref="CommandLineParserErrorBase"/> class.
-        /// </summary>
-        /// <param name="cmdOption">The <see cref="ICommandLineOption"/> this error relates too. This must not be <c>null</c>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="cmdOption"/> is <c>null</c>.</exception>
-        protected CommandLineParserErrorBase(ICommandLineOption cmdOption)
-        {
-            Option = cmdOption ?? throw new ArgumentNullException(nameof(cmdOption));
-        }
 
         /// <summary>
         /// Gets the <see cref="ICommandLineOption"/> this error belongs too.
         /// </summary>
-        public virtual ICommandLineOption Option { get; private set; }
+        public virtual ICommandLineOption Option { get; private set; } = cmdOption ?? throw new ArgumentNullException(nameof(cmdOption));
     }
 }

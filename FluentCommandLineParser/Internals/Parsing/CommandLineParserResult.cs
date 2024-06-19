@@ -37,9 +37,9 @@ namespace Fclp.Internals.Parsing
         /// </summary>
         public CommandLineParserResult()
         {
-            Errors = new List<ICommandLineParserError>();
-            AdditionalOptionsFound = new List<KeyValuePair<string, string>>();
-            UnMatchedOptions = new List<ICommandLineOption>();
+            Errors = [];
+            AdditionalOptionsFound = [];
+            UnMatchedOptions = [];
         }
 
         /// <summary>

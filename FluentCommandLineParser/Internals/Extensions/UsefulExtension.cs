@@ -84,7 +84,7 @@ namespace Fclp.Internals.Extensions
             {
                 return str;
             }
-            if (str.StartsWith("\"") && str.EndsWith("\""))
+            if (str.StartsWith('\"') && str.EndsWith('\"'))
             {
                 str = str[1..^1];
             }
@@ -107,7 +107,9 @@ namespace Fclp.Internals.Extensions
         /// </summary>
         /// <param name="str">The <see cref="System.String"/> to examine.</param>
         /// <returns><c>true</c> if <paramref name="str"/> is wrapped in double quotes; otherwise <c>false</c>.</returns>
-        public static bool IsWrappedInDoubleQuotes(this string str) => str.IsNullOrWhiteSpace() == false && str.StartsWith("\"") && str.EndsWith("\"");
+        public static bool IsWrappedInDoubleQuotes(this string str) => str.IsNullOrWhiteSpace() == false && str.StartsWith('\"') && str.EndsWith('\"');
+
+        private static readonly char[] separator = ['\n'];
 
         /// <summary>
         /// Splits the specified <see cref="System.String"/> when each whitespace char is encountered into a collection of substrings.
@@ -139,7 +141,7 @@ namespace Fclp.Internals.Extensions
                 }
             }
 
-            return new string(parmChars).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            return new string(parmChars).Split(separator, StringSplitOptions.RemoveEmptyEntries);
         }
 
         /// <summary>

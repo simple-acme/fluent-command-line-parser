@@ -41,18 +41,13 @@ namespace Fclp.Internals.Validators
     /// <summary>
     /// Validator used to ensure no there are duplicate Options setup.
     /// </summary>
-    public class NoDuplicateOptionValidator : ICommandLineOptionValidator
+    /// <remarks>
+    /// Initialises a new instance of the <see cref="NoDuplicateOptionValidator"/> class.
+    /// </remarks>
+    /// <param name="container">The <see cref="IFluentCommandLineParser"/> containing the setup options. This must not be null.</param>
+    public class NoDuplicateOptionValidator(ICommandLineOptionContainer container) : ICommandLineOptionValidator
     {
-        private readonly ICommandLineOptionContainer _container;
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="NoDuplicateOptionValidator"/> class.
-        /// </summary>
-        /// <param name="container">The <see cref="IFluentCommandLineParser"/> containing the setup options. This must not be null.</param>
-        public NoDuplicateOptionValidator(ICommandLineOptionContainer container)
-        {
-            _container = container ?? throw new ArgumentNullException(nameof(container));
-        }
+        private readonly ICommandLineOptionContainer _container = container ?? throw new ArgumentNullException(nameof(container));
 
         ///// <summary>
         ///// Gets the <see cref="StringComparison"/> type used for duplicates.

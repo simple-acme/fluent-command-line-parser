@@ -35,24 +35,18 @@ namespace Fclp.Internals
     /// A command line Option
     /// </summary>
     /// <typeparam name="T">The type of value this Option requires.</typeparam>
-    public class CommandLineOption<T> : ICommandLineOptionResult<T>
+    /// <remarks>
+    /// Initialises a new instance of the <see cref="CommandLineOption{T}"/> class.
+    /// </remarks>
+    /// <param name="shortName">The short name for this Option or <c>null</c> if not required. Either <paramref name="shortName"/> or <paramref name="longName"/> must not be <c>null</c>, <c>empty</c> or contain only <c>whitespace</c>.</param>
+    /// <param name="longName">The long name for this Option or <c>null</c> if not required. Either <paramref name="shortName"/> or <paramref name="longName"/> must not be <c>null</c>, <c>empty</c> or contain only <c>whitespace</c>.</param>
+    /// <param name="parser">The parser to use for this Option.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if both <paramref name="shortName"/> and <paramref name="longName"/> are <c>null</c>, <c>empty</c> or contain only <c>whitespace</c>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="parser"/> is <c>null</c>.</exception>
+    public class CommandLineOption<T>(string shortName, string longName, ICommandLineOptionParser<T> parser) : ICommandLineOptionResult<T>
     {
-        #region Constructors
 
-        /// <summary>
-        /// Initialises a new instance of the <see cref="CommandLineOption{T}"/> class.
-        /// </summary>
-        /// <param name="shortName">The short name for this Option or <c>null</c> if not required. Either <paramref name="shortName"/> or <paramref name="longName"/> must not be <c>null</c>, <c>empty</c> or contain only <c>whitespace</c>.</param>
-        /// <param name="longName">The long name for this Option or <c>null</c> if not required. Either <paramref name="shortName"/> or <paramref name="longName"/> must not be <c>null</c>, <c>empty</c> or contain only <c>whitespace</c>.</param>
-        /// <param name="parser">The parser to use for this Option.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if both <paramref name="shortName"/> and <paramref name="longName"/> are <c>null</c>, <c>empty</c> or contain only <c>whitespace</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="parser"/> is <c>null</c>.</exception>
-        public CommandLineOption(string shortName, string longName, ICommandLineOptionParser<T> parser)
-        {
-            ShortName = shortName;
-            LongName = longName;
-            Parser = parser ?? throw new ArgumentNullException(nameof(parser));
-        }
+        #region Constructors
 
         #endregion
 
@@ -62,7 +56,7 @@ namespace Fclp.Internals
         /// <summary>
         /// Gets or sets the parser to use for this <see cref="CommandLineOption{T}"/>.
         /// </summary>
-        private ICommandLineOptionParser<T> Parser { get; set; }
+        private ICommandLineOptionParser<T> Parser { get; set; } = parser ?? throw new ArgumentNullException(nameof(parser));
 
         /// <summary>
         /// Gets the description set for this <see cref="CommandLineOption{T}"/>.
@@ -83,12 +77,12 @@ namespace Fclp.Internals
         /// <summary>
         /// Gets the short name of this <see cref="ICommandLineOption"/>.
         /// </summary>
-        public string ShortName { get; set; }
+        public string ShortName { get; set; } = shortName;
 
         /// <summary>
         /// Gets the long name of this <see cref="ICommandLineOption"/>.
         /// </summary>
-        public string LongName { get; set; }
+        public string LongName { get; set; } = longName;
 
         /// <summary>
         /// Gets whether this <see cref="ICommandLineOption"/> has a default value setup.
@@ -109,7 +103,7 @@ namespace Fclp.Internals
             {
                 var type = typeof(T);
                 var genericArgs = type.GetGenericArguments();
-                return genericArgs.Any() ? genericArgs.First() : type;
+                return genericArgs.Length != 0 ? genericArgs.First() : type;
             }
         }
 
@@ -187,7 +181,7 @@ namespace Fclp.Internals
                 return;
             }
 
-            if (option.AdditionalValues.Any())
+            if (option.AdditionalValues.Length != 0)
             {
                 AdditionalArgumentsCallback(option.AdditionalValues);
             }

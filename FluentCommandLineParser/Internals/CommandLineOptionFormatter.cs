@@ -88,14 +88,11 @@ namespace Fclp.Internals
         /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <c>null</c>.</exception>
         public string Format(IEnumerable<ICommandLineOption> options)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
+            ArgumentNullException.ThrowIfNull(options);
 
             var list = options.ToList();
 
-            if (!list.Any())
+            if (list.Count == 0)
             {
                 return NoOptionsText;
             }

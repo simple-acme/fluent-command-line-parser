@@ -37,12 +37,12 @@ namespace Fclp.Internals.Parsing.OptionParsers
         /// <summary>
         /// The recognised false argument values.
         /// </summary>
-        private static readonly string[] recognisedFalseArgs = new[] { "off", "0" };
+        private static readonly string[] recognisedFalseArgs = ["off", "0"];
 
         /// <summary>
         /// The recognised true argument values (use these values to set a boolean arg to true)
         /// </summary>
-	    private static readonly string[] recognisedTrueArgs = new[] { "on", "1" };
+	    private static readonly string[] recognisedTrueArgs = ["on", "1"];
 
         /// <summary>
         /// Parses the specified <see cref="System.String"/> into a <see cref="System.Boolean"/>.

@@ -27,22 +27,19 @@ namespace Fclp.Internals.Parsing.OptionParsers
     /// <summary>
     /// Parser used to convert to nullable types
     /// </summary>
-    public class NullableBoolCommandLineOptionParser : ICommandLineOptionParser<bool?>
+    /// <remarks>
+    /// Initialises a new instance of the <see cref="NullableCommandLineOptionParser{TType}"/>.
+    /// </remarks>
+    /// <param name="parserFactory"></param>
+    public class NullableBoolCommandLineOptionParser(ICommandLineOptionParserFactory parserFactory) : ICommandLineOptionParser<bool?>
     {
-        private readonly ICommandLineOptionParserFactory _parserFactory;
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="NullableCommandLineOptionParser{TType}"/>.
-        /// </summary>
-        /// <param name="parserFactory"></param>
-        public NullableBoolCommandLineOptionParser(ICommandLineOptionParserFactory parserFactory) => _parserFactory = parserFactory;
 
         /// <summary>
         /// Parses the specified <see cref="ParsedOption"/> into a nullable type.
         /// </summary>
         public bool? Parse(ParsedOption parsedOption)
         {
-            var parser = _parserFactory.CreateParser<bool>();
+            var parser = parserFactory.CreateParser<bool>();
             if (parser.CanParse(parsedOption) == false)
             {
                 return null;

@@ -29,15 +29,12 @@ namespace Fclp.Internals.Parsing
     /// <summary>
     /// Factory used to created parsed option meta data.
     /// </summary>
-    public class ParsedOptionFactory
+    /// <remarks>
+    /// Initialises a new instance of <see cref="ParsedOptionFactory"/>.
+    /// </remarks>
+    /// <param name="specialCharacters"></param>
+    public class ParsedOptionFactory(SpecialCharacters specialCharacters)
     {
-        private readonly SpecialCharacters _specialCharacters;
-
-        /// <summary>
-        /// Initialises a new instance of <see cref="ParsedOptionFactory"/>.
-        /// </summary>
-        /// <param name="specialCharacters"></param>
-	    public ParsedOptionFactory(SpecialCharacters specialCharacters) => _specialCharacters = specialCharacters;
 
         /// <summary>
         /// Creates parsed option meta data for the specified raw key.
@@ -61,13 +58,13 @@ namespace Fclp.Internals.Parsing
         /// </summary>
         /// <param name="arg">The <see cref="System.String"/> to extract the key identifier from.</param>
         /// <returns>A <see cref="System.String"/> representing the key identifier if found; otherwise <c>null</c>.</returns>
-        private string ExtractPrefix(string arg) => arg != null ? _specialCharacters.OptionPrefix.FirstOrDefault(arg.StartsWith) : null;
+        private string ExtractPrefix(string arg) => arg != null ? specialCharacters.OptionPrefix.FirstOrDefault(arg.StartsWith) : null;
 
         /// <summary>
         /// Extracts the key identifier from the specified <see cref="System.String"/>.
         /// </summary>
         /// <param name="arg">The <see cref="System.String"/> to extract the key identifier from.</param>
         /// <returns>A <see cref="System.String"/> representing the key identifier if found; otherwise <c>null</c>.</returns>
-        private string ExtractSuffix(string arg) => arg != null ? _specialCharacters.OptionSuffix.FirstOrDefault(arg.EndsWith) : null;
+        private string ExtractSuffix(string arg) => arg != null ? specialCharacters.OptionSuffix.FirstOrDefault(arg.EndsWith) : null;
     }
 }

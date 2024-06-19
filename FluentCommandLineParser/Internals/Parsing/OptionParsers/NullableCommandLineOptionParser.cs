@@ -30,22 +30,19 @@ namespace Fclp.Internals.Parsing.OptionParsers
     /// <summary>
     /// Parser used to convert to nullable types
     /// </summary>
-    public class NullableCommandLineOptionParser<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TNullableType> : ICommandLineOptionParser<TNullableType?> where TNullableType : struct
+    /// <remarks>
+    /// Initialises a new instance of the <see cref="NullableCommandLineOptionParser{TType}"/>.
+    /// </remarks>
+    /// <param name="parserFactory"></param>
+    public class NullableCommandLineOptionParser<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TNullableType>(ICommandLineOptionParserFactory parserFactory) : ICommandLineOptionParser<TNullableType?> where TNullableType : struct
     {
-        private readonly ICommandLineOptionParserFactory _parserFactory;
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="NullableCommandLineOptionParser{TType}"/>.
-        /// </summary>
-        /// <param name="parserFactory"></param>
-        public NullableCommandLineOptionParser(ICommandLineOptionParserFactory parserFactory) => _parserFactory = parserFactory;
 
         /// <summary>
         /// Parses the specified <see cref="ParsedOption"/> into a nullable type.
         /// </summary>
         public TNullableType? Parse(ParsedOption parsedOption)
         {
-            var parser = _parserFactory.CreateParser<TNullableType>();
+            var parser = parserFactory.CreateParser<TNullableType>();
             if (parser.CanParse(parsedOption) == false)
             {
                 return null;
